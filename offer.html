@@ -20,9 +20,46 @@
   --gold:#f5c542;
 }
 *{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
 body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:var(--bg);color:var(--text);line-height:1.55}
 a{color:inherit;text-decoration:none}
 .wrap{max-width:740px;margin:0 auto;padding:0 18px}
+
+/* ===== ANIMATIONS ===== */
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(28px)}
+  to{opacity:1;transform:translateY(0)}
+}
+@keyframes fadeIn{
+  from{opacity:0}
+  to{opacity:1}
+}
+@keyframes float{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-10px)}
+}
+@keyframes pulse-glow{
+  0%,100%{box-shadow:0 8px 28px rgba(42,171,238,.35)}
+  50%{box-shadow:0 8px 36px rgba(42,171,238,.55)}
+}
+@keyframes scaleIn{
+  from{opacity:0;transform:scale(.92)}
+  to{opacity:1;transform:scale(1)}
+}
+
+.reveal{
+  opacity:0;
+  transform:translateY(28px);
+  transition:opacity .7s ease, transform .7s ease;
+}
+.reveal.visible{
+  opacity:1;
+  transform:translateY(0);
+}
+.reveal-delay-1{transition-delay:.1s}
+.reveal-delay-2{transition-delay:.2s}
+.reveal-delay-3{transition-delay:.3s}
+.reveal-delay-4{transition-delay:.4s}
 
 /* HERO */
 .hero{
@@ -40,14 +77,17 @@ a{color:inherit;text-decoration:none}
   font-size:.72rem;font-weight:700;letter-spacing:.04em;
   padding:6px 14px;border-radius:20px;margin-bottom:18px;
   text-transform:uppercase;
+  animation:fadeUp .6s ease both;
 }
 .hero h1{
   font-size:clamp(1.7rem,5vw,2.35rem);
   font-weight:800;line-height:1.2;margin-bottom:14px;
+  animation:fadeUp .7s ease .1s both;
 }
 .hero h1 span{color:var(--accent)}
 .hero .lead{
   font-size:1.08rem;color:var(--muted);max-width:460px;margin:0 auto 28px;
+  animation:fadeUp .7s ease .2s both;
 }
 .hero .btn{
   display:inline-flex;align-items:center;gap:10px;
@@ -55,30 +95,48 @@ a{color:inherit;text-decoration:none}
   padding:15px 30px;border-radius:14px;
   font-weight:700;font-size:1.05rem;
   box-shadow:0 8px 28px rgba(42,171,238,.35);
+  transition:transform .25s ease, box-shadow .25s ease;
+  animation:fadeUp .7s ease .3s both, pulse-glow 2.5s ease 1s infinite;
 }
+.hero .btn:hover{
+  transform:translateY(-3px) scale(1.03);
+  box-shadow:0 12px 36px rgba(42,171,238,.5);
+}
+.hero .btn:active{transform:translateY(0) scale(.98)}
 .hero .btn svg{width:22px;height:22px;fill:currentColor}
-.hero .sub{margin-top:14px;font-size:.85rem;color:var(--muted)}
+.hero .sub{margin-top:14px;font-size:.85rem;color:var(--muted);animation:fadeUp .7s ease .4s both}
 
 /* Phone mock */
-.phone-wrap{margin:36px auto 0;max-width:260px;position:relative}
+.phone-wrap{
+  margin:36px auto 0;max-width:260px;position:relative;
+  animation:fadeUp .8s ease .5s both, float 4s ease-in-out 1.2s infinite;
+}
 .phone{
   background:var(--card2);
   border:3px solid #333;
   border-radius:28px;
   padding:12px 10px 16px;
   box-shadow:0 20px 50px rgba(0,0,0,.5);
+  transition:transform .3s ease, box-shadow .3s ease;
+}
+.phone:hover{
+  transform:scale(1.03);
+  box-shadow:0 28px 60px rgba(0,0,0,.6);
 }
 .phone-notch{width:90px;height:8px;background:#333;border-radius:4px;margin:0 auto 12px}
 .phone-screen{background:#121214;border-radius:16px;padding:12px;min-height:280px}
 .phone-header{font-size:.8rem;font-weight:600;margin-bottom:10px;display:flex;justify-content:space-between}
-.phone-item{display:flex;gap:8px;padding:8px 0;border-bottom:1px solid #2a2a2e;font-size:.75rem}
+.phone-item{display:flex;gap:8px;padding:8px 0;border-bottom:1px solid #2a2a2e;font-size:.75rem;transition:background .2s}
+.phone-item:hover{background:rgba(255,255,255,.03);border-radius:6px}
 .phone-item .pic{width:42px;height:42px;border-radius:8px;background:linear-gradient(135deg,#333,#222);flex:none;display:flex;align-items:center;justify-content:center;font-size:1.1rem}
 .phone-item .name{font-weight:600}
 .phone-item .price{color:var(--accent);font-weight:700;font-size:.7rem;margin-top:2px}
 .phone-bar{
   margin-top:12px;background:var(--accent);color:#fff;
   text-align:center;padding:10px;border-radius:10px;font-size:.8rem;font-weight:600;
+  transition:transform .2s, filter .2s;
 }
+.phone-bar:hover{filter:brightness(1.1);transform:scale(1.02)}
 
 /* Sections */
 section{padding:48px 0}
@@ -93,6 +151,12 @@ h2{font-size:1.45rem;font-weight:800;text-align:center;margin-bottom:8px}
   border-radius:16px;
   padding:20px 18px 20px 68px;
   position:relative;
+  transition:transform .3s ease, border-color .3s ease, box-shadow .3s ease;
+}
+.step:hover{
+  transform:translateX(6px);
+  border-color:rgba(255,59,48,.4);
+  box-shadow:0 8px 24px rgba(0,0,0,.3);
 }
 .step .num{
   position:absolute;left:16px;top:20px;
@@ -101,7 +165,9 @@ h2{font-size:1.45rem;font-weight:800;text-align:center;margin-bottom:8px}
   color:#fff;border-radius:12px;
   display:flex;align-items:center;justify-content:center;
   font-weight:800;font-size:1.05rem;
+  transition:transform .3s ease;
 }
+.step:hover .num{transform:scale(1.1) rotate(-5deg)}
 .step h3{font-size:1.05rem;font-weight:700;margin-bottom:4px}
 .step p{font-size:.9rem;color:var(--muted)}
 
@@ -113,13 +179,21 @@ h2{font-size:1.45rem;font-weight:800;text-align:center;margin-bottom:8px}
   border:1px solid var(--line);
   border-radius:16px;
   padding:20px;
+  transition:transform .3s ease, border-color .3s ease, box-shadow .3s ease;
+}
+.benefit:hover{
+  transform:translateY(-6px);
+  border-color:rgba(255,255,255,.12);
+  box-shadow:0 12px 32px rgba(0,0,0,.35);
 }
 .benefit .icon{
   width:44px;height:44px;border-radius:12px;
   background:var(--card2);
   display:flex;align-items:center;justify-content:center;
   font-size:1.35rem;margin-bottom:12px;
+  transition:transform .3s ease;
 }
+.benefit:hover .icon{transform:scale(1.15)}
 .benefit h3{font-size:1rem;font-weight:700;margin-bottom:6px}
 .benefit p{font-size:.88rem;color:var(--muted)}
 
@@ -129,19 +203,25 @@ h2{font-size:1.45rem;font-weight:800;text-align:center;margin-bottom:8px}
   border:1px solid var(--line);
   border-radius:18px;
   padding:28px 22px;
+  transition:box-shadow .3s ease;
 }
+.feature-strip:hover{box-shadow:0 8px 30px rgba(0,0,0,.3)}
 .feature-strip ul{list-style:none}
 .feature-strip li{
   padding:11px 0 11px 32px;
   position:relative;
   border-bottom:1px solid var(--line);
   font-size:.95rem;
+  transition:padding-left .25s ease, color .25s ease;
 }
 .feature-strip li:last-child{border-bottom:0}
+.feature-strip li:hover{padding-left:38px;color:#fff}
 .feature-strip li::before{
   content:"✓";position:absolute;left:0;
   color:var(--ok);font-weight:800;font-size:1.1rem;
+  transition:transform .25s ease;
 }
+.feature-strip li:hover::before{transform:scale(1.2)}
 
 /* Pricing */
 .pricing{display:grid;gap:14px}
@@ -152,10 +232,18 @@ h2{font-size:1.45rem;font-weight:800;text-align:center;margin-bottom:8px}
   padding:26px 22px;
   position:relative;
   overflow:hidden;
+  transition:transform .35s ease, box-shadow .35s ease, border-color .35s ease;
+}
+.price-card:hover{
+  transform:translateY(-8px);
+  box-shadow:0 16px 40px rgba(0,0,0,.4);
 }
 .price-card.popular{
   border:2px solid var(--accent);
   background:linear-gradient(180deg,rgba(255,59,48,.08),var(--card));
+}
+.price-card.popular:hover{
+  box-shadow:0 16px 40px rgba(255,59,48,.2);
 }
 .price-card.popular::before{
   content:"ХИТ";
@@ -188,6 +276,11 @@ h2{font-size:1.45rem;font-weight:800;text-align:center;margin-bottom:8px}
   padding:18px;
   display:flex;justify-content:space-between;align-items:center;gap:12px;
   margin-top:16px;
+  transition:transform .3s ease, border-color .3s ease;
+}
+.maint:hover{
+  transform:translateY(-3px);
+  border-color:rgba(255,59,48,.3);
 }
 .maint strong{font-size:.95rem}
 .maint .price{font-weight:800;color:var(--accent);white-space:nowrap;font-size:1.1rem}
@@ -200,7 +293,9 @@ h2{font-size:1.45rem;font-weight:800;text-align:center;margin-bottom:8px}
   padding:36px 24px;
   text-align:center;
   margin:20px 0 40px;
+  transition:box-shadow .3s ease;
 }
+.cta:hover{box-shadow:0 12px 40px rgba(0,0,0,.4)}
 .cta h2{font-size:1.4rem;margin-bottom:8px}
 .cta p{color:var(--muted);margin-bottom:22px;font-size:1rem}
 .cta .btn{
@@ -209,7 +304,13 @@ h2{font-size:1.45rem;font-weight:800;text-align:center;margin-bottom:8px}
   padding:15px 30px;border-radius:14px;
   font-weight:700;font-size:1.05rem;
   box-shadow:0 8px 28px rgba(42,171,238,.3);
+  transition:transform .25s ease, box-shadow .25s ease;
 }
+.cta .btn:hover{
+  transform:translateY(-3px) scale(1.03);
+  box-shadow:0 12px 36px rgba(42,171,238,.5);
+}
+.cta .btn:active{transform:translateY(0) scale(.98)}
 .cta .btn svg{width:22px;height:22px;fill:currentColor}
 .cta .handle{display:block;margin-top:12px;font-size:.9rem;color:var(--muted)}
 .cta .free{
@@ -219,6 +320,7 @@ h2{font-size:1.45rem;font-weight:800;text-align:center;margin-bottom:8px}
   color:var(--gold);
   font-size:.85rem;font-weight:600;
   padding:8px 16px;border-radius:20px;
+  animation:fadeIn 1s ease 1s both;
 }
 
 footer{text-align:center;padding:16px 18px 48px;color:var(--muted);font-size:.85rem}
@@ -238,7 +340,6 @@ footer{text-align:center;padding:16px 18px 48px;color:var(--muted);font-size:.85
     </a>
     <div class="sub">Отвечаю быстро · Гомель</div>
 
-    <!-- Phone mockup -->
     <div class="phone-wrap">
       <div class="phone">
         <div class="phone-notch"></div>
@@ -270,20 +371,20 @@ footer{text-align:center;padding:16px 18px 48px;color:var(--muted);font-size:.85
 <!-- HOW -->
 <section>
   <div class="wrap">
-    <h2>Как это работает</h2>
-    <p class="section-sub">Три простых шага — и система уже у вас</p>
+    <h2 class="reveal">Как это работает</h2>
+    <p class="section-sub reveal reveal-delay-1">Три простых шага — и система уже у вас</p>
     <div class="steps">
-      <div class="step">
+      <div class="step reveal reveal-delay-1">
         <div class="num">1</div>
         <h3>Гость касается метки на столе</h3>
         <p>На телефоне сразу открывается ваше меню с фото, ценами и составом блюд.</p>
       </div>
-      <div class="step">
+      <div class="step reveal reveal-delay-2">
         <div class="num">2</div>
         <h3>Выбирает блюда и оформляет заказ</h3>
         <p>Добавляет в корзину, пишет комментарий и выбирает: оплатить онлайн или наличными.</p>
       </div>
-      <div class="step">
+      <div class="step reveal reveal-delay-3">
         <div class="num">3</div>
         <h3>Заказ мгновенно приходит вам</h3>
         <p>В Telegram — с номером стола, списком блюд и способом оплаты. Кухня и официанты видят всё сразу.</p>
@@ -295,25 +396,25 @@ footer{text-align:center;padding:16px 18px 48px;color:var(--muted);font-size:.85
 <!-- BENEFITS -->
 <section style="background:#121214;border-top:1px solid var(--line);border-bottom:1px solid var(--line)">
   <div class="wrap">
-    <h2>Зачем это вашему заведению</h2>
-    <p class="section-sub">Не просто «модно» — это экономит время и деньги</p>
+    <h2 class="reveal">Зачем это вашему заведению</h2>
+    <p class="section-sub reveal reveal-delay-1">Не просто «модно» — это экономит время и деньги</p>
     <div class="benefits">
-      <div class="benefit">
+      <div class="benefit reveal reveal-delay-1">
         <div class="icon">⚡</div>
         <h3>Официанты не бегают зря</h3>
         <p>Гости заказывают сами. Персонал успевает обслуживать больше столов.</p>
       </div>
-      <div class="benefit">
+      <div class="benefit reveal reveal-delay-2">
         <div class="icon">📈</div>
         <h3>Выше средний чек</h3>
         <p>Красивые фото и удобное меню побуждают брать больше позиций.</p>
       </div>
-      <div class="benefit">
+      <div class="benefit reveal reveal-delay-3">
         <div class="icon">🛡</div>
         <h3>Заказы не теряются</h3>
         <p>Всё фиксируется. Номер стола, состав, комментарии — в одном сообщении.</p>
       </div>
-      <div class="benefit">
+      <div class="benefit reveal reveal-delay-4">
         <div class="icon">✨</div>
         <h3>Современный имидж</h3>
         <p>Заведение выглядит технологично. Гости это замечают и возвращаются.</p>
@@ -325,9 +426,9 @@ footer{text-align:center;padding:16px 18px 48px;color:var(--muted);font-size:.85
 <!-- WHAT'S INCLUDED -->
 <section>
   <div class="wrap">
-    <h2>Что вы получаете</h2>
-    <p class="section-sub">Полный комплект под ключ</p>
-    <div class="feature-strip">
+    <h2 class="reveal">Что вы получаете</h2>
+    <p class="section-sub reveal reveal-delay-1">Полный комплект под ключ</p>
+    <div class="feature-strip reveal reveal-delay-2">
       <ul>
         <li>NFC-метки на каждый стол (со своим номером)</li>
         <li>Красивое мобильное меню с фото, ценами и составом</li>
@@ -345,11 +446,11 @@ footer{text-align:center;padding:16px 18px 48px;color:var(--muted);font-size:.85
 <!-- PRICING -->
 <section style="background:#121214;border-top:1px solid var(--line);border-bottom:1px solid var(--line)">
   <div class="wrap">
-    <h2>Цены</h2>
-    <p class="section-sub">Прозрачно. Без сюрпризов.</p>
+    <h2 class="reveal">Цены</h2>
+    <p class="section-sub reveal reveal-delay-1">Прозрачно. Без сюрпризов.</p>
     <div class="pricing">
 
-      <div class="price-card">
+      <div class="price-card reveal reveal-delay-1">
         <h3>Старт</h3>
         <div class="sub">Разовая установка</div>
         <div class="amount">240 <span>BYN</span></div>
@@ -363,7 +464,7 @@ footer{text-align:center;padding:16px 18px 48px;color:var(--muted);font-size:.85
         </ul>
       </div>
 
-      <div class="price-card popular">
+      <div class="price-card popular reveal reveal-delay-2">
         <h3>Стандарт</h3>
         <div class="sub">Лучший выбор для большинства</div>
         <div class="amount">340 <span>BYN</span></div>
@@ -378,7 +479,7 @@ footer{text-align:center;padding:16px 18px 48px;color:var(--muted);font-size:.85
         <div class="note">3 месяца поддержки уже включены — выгодно</div>
       </div>
 
-      <div class="price-card">
+      <div class="price-card reveal reveal-delay-3">
         <h3>Годовой</h3>
         <div class="sub">Максимум спокойствия</div>
         <div class="amount">790 <span>BYN</span></div>
@@ -394,7 +495,7 @@ footer{text-align:center;padding:16px 18px 48px;color:var(--muted);font-size:.85
 
     </div>
 
-    <div class="maint">
+    <div class="maint reveal reveal-delay-4">
       <div>
         <strong>Ежемесячное обслуживание</strong><br>
         <span style="font-size:.8rem;color:var(--muted)">После окончания пакета</span>
@@ -406,7 +507,7 @@ footer{text-align:center;padding:16px 18px 48px;color:var(--muted);font-size:.85
 
 <!-- FINAL CTA -->
 <div class="wrap">
-  <div class="cta">
+  <div class="cta reveal">
     <h2>Попробуйте бесплатно</h2>
     <p>Поставим систему на 2–3 стола<br>на 7–10 дней — без оплаты</p>
     <a href="https://t.me/Gde_Nikita" class="btn" target="_blank" rel="noopener">
@@ -421,6 +522,20 @@ footer{text-align:center;padding:16px 18px 48px;color:var(--muted);font-size:.85
 <footer>
   <p>Гомель · NFC Меню для кафе и ресторанов</p>
 </footer>
+
+<script>
+// Scroll reveal
+const reveals = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(el => {
+    if (el.isIntersecting) {
+      el.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.12, rootMargin: '0px 0px -30px 0px' });
+
+reveals.forEach(r => observer.observe(r));
+</script>
 
 </body>
 </html>
