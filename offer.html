@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NFC Меню — для кафе и ресторанов Гомеля</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+:root{--bg:#f7f6f3;--card:#fff;--text:#1a1a1a;--muted:#6b6b6b;--accent:#d9362b;--dark:#1d1d1f;--line:#e8e6e1;--ok:#2a9d8f;--tg:#2AABEE}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:var(--bg);color:var(--text);line-height:1.55}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:720px;margin:0 auto;padding:0 16px}
+
+/* Hero */
+.hero{background:var(--dark);color:#fff;padding:48px 16px 56px;text-align:center}
+.hero .badge{display:inline-block;background:var(--accent);font-size:.75rem;font-weight:600;padding:5px 14px;border-radius:20px;margin-bottom:16px}
+.hero h1{font-size:1.85rem;font-weight:800;line-height:1.25;margin-bottom:12px}
+.hero p{opacity:.85;font-size:1.05rem;max-width:480px;margin:0 auto 24px}
+.hero .btn{display:inline-flex;align-items:center;gap:8px;background:var(--tg);color:#fff;padding:14px 28px;border-radius:12px;font-weight:600;font-size:1rem}
+.hero .btn svg{width:20px;height:20px;fill:currentColor}
+
+/* Sections */
+section{padding:40px 0}
+h2{font-size:1.4rem;font-weight:700;margin-bottom:8px;text-align:center}
+.section-sub{text-align:center;color:var(--muted);margin-bottom:28px;font-size:.95rem}
+
+/* How it works */
+.steps{display:grid;gap:14px}
+.step{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 18px 18px 64px;position:relative}
+.step .num{position:absolute;left:16px;top:18px;width:36px;height:36px;background:var(--dark);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.95rem}
+.step h3{font-size:1rem;font-weight:600;margin-bottom:4px}
+.step p{font-size:.9rem;color:var(--muted)}
+
+/* Benefits */
+.benefits{display:grid;gap:12px}
+@media(min-width:560px){.benefits{grid-template-columns:1fr 1fr}}
+.benefit{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px}
+.benefit .icon{font-size:1.5rem;margin-bottom:8px}
+.benefit h3{font-size:.95rem;font-weight:600;margin-bottom:4px}
+.benefit p{font-size:.85rem;color:var(--muted)}
+
+/* Features list */
+.features{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px;margin-top:8px}
+.features ul{list-style:none}
+.features li{padding:10px 0 10px 28px;position:relative;border-bottom:1px solid var(--line);font-size:.95rem}
+.features li:last-child{border-bottom:0}
+.features li::before{content:"✓";position:absolute;left:0;color:var(--ok);font-weight:700}
+
+/* Pricing */
+.pricing{display:grid;gap:14px}
+.price-card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px;position:relative;overflow:hidden}
+.price-card.popular{border:2px solid var(--accent)}
+.price-card.popular::before{content:"ВЫГОДНО";position:absolute;top:12px;right:-30px;background:var(--accent);color:#fff;font-size:.65rem;font-weight:700;padding:4px 36px;transform:rotate(45deg)}
+.price-card h3{font-size:1.15rem;font-weight:700;margin-bottom:2px}
+.price-card .sub{color:var(--muted);font-size:.85rem;margin-bottom:12px}
+.price-card .amount{font-size:1.9rem;font-weight:800;margin-bottom:4px}
+.price-card .amount span{font-size:.95rem;font-weight:500;color:var(--muted)}
+.price-card .old{text-decoration:line-through;color:var(--muted);font-size:.9rem;margin-bottom:12px}
+.price-card ul{list-style:none;margin:12px 0 0}
+.price-card li{padding:6px 0 6px 24px;position:relative;font-size:.9rem}
+.price-card li::before{content:"✓";position:absolute;left:0;color:var(--ok);font-weight:700}
+.note{background:#f0faf8;border-radius:10px;padding:10px 12px;font-size:.85rem;color:#1a6b5f;margin-top:12px}
+
+/* Maintenance */
+.maint{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.maint strong{font-size:.95rem}
+.maint .price{font-weight:700;color:var(--accent);white-space:nowrap}
+
+/* CTA */
+.cta{background:var(--dark);color:#fff;border-radius:16px;padding:32px 24px;text-align:center;margin:32px 0}
+.cta h2{font-size:1.3rem;margin-bottom:8px}
+.cta p{opacity:.85;margin-bottom:20px;font-size:.95rem}
+.cta .btn{display:inline-flex;align-items:center;gap:8px;background:var(--tg);color:#fff;padding:14px 28px;border-radius:12px;font-weight:600}
+.cta .btn svg{width:20px;height:20px;fill:currentColor}
+.cta .handle{display:block;margin-top:12px;font-size:.9rem;opacity:.7}
+
+footer{text-align:center;padding:24px 16px 40px;color:var(--muted);font-size:.85rem}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="wrap">
+    <div class="badge">Гомель · 2026</div>
+    <h1>Электронное меню<br>с заказом прямо со стола</h1>
+    <p>Гость прикладывает телефон к метке — открывается меню, он делает заказ и выбирает способ оплаты. Заказ сразу приходит вам в Telegram.</p>
+    <a href="https://t.me/Gde_Nikita" class="btn" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.161c-.18 1.897-.962 6.502-1.359 8.627-.168.9-.5 1.201-.82 1.23-.697.064-1.226-.461-1.901-.903-1.056-.693-1.653-1.124-2.678-1.8-1.185-.781-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.139-5.062 3.345-.479.329-.913.489-1.302.481-.428-.009-1.252-.242-1.865-.44-.752-.244-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.831-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635.099-.002.321.023.465.141.121.099.155.232.171.326.016.093.036.305.02.47z"/></svg>
+      Написать в Telegram
+    </a>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<section>
+  <div class="wrap">
+    <h2>Как это работает</h2>
+    <p class="section-sub">Всё просто — и для гостя, и для вас</p>
+    <div class="steps">
+      <div class="step">
+        <div class="num">1</div>
+        <h3>Гость прикладывает телефон</h3>
+        <p>К NFC-метке на столе. Открывается ваше меню с фото, ценами и составом блюд.</p>
+      </div>
+      <div class="step">
+        <div class="num">2</div>
+        <h3>Выбирает блюда и оформляет заказ</h3>
+        <p>Добавляет в корзину, указывает комментарий и выбирает: оплатить онлайн или наличными.</p>
+      </div>
+      <div class="step">
+        <div class="num">3</div>
+        <h3>Заказ приходит вам в Telegram</h3>
+        <p>Мгновенно. С номером стола, составом заказа и способом оплаты. Официант и кухня видят всё сразу.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BENEFITS -->
+<section style="background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line)">
+  <div class="wrap">
+    <h2>Что это даёт заведению</h2>
+    <p class="section-sub">Реальная польза, а не просто «красиво»</p>
+    <div class="benefits">
+      <div class="benefit">
+        <div class="icon">⏱</div>
+        <h3>Меньше нагрузки на официантов</h3>
+        <p>Гости заказывают сами. Официант не бегает с блокнотом по залу.</p>
+      </div>
+      <div class="benefit">
+        <div class="icon">📱</div>
+        <h3>Современный вид</h3>
+        <p>Заведение выглядит технологично. Это нравится гостям и повышает лояльность.</p>
+      </div>
+      <div class="benefit">
+        <div class="icon">💰</div>
+        <h3>Оплата как удобно гостю</h3>
+        <p>Онлайн или наличными. Деньги от гостей идут сразу на ваш счёт.</p>
+      </div>
+      <div class="benefit">
+        <div class="icon">🔔</div>
+        <h3>Заказы не теряются</h3>
+        <p>Всё приходит в Telegram с номером стола. Кухня и зал работают синхронно.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT'S INCLUDED -->
+<section>
+  <div class="wrap">
+    <h2>Что входит в систему</h2>
+    <p class="section-sub">Полный комплект под ключ</p>
+    <div class="features">
+      <ul>
+        <li>NFC-метки на каждый стол (программируются под ваш номер стола)</li>
+        <li>Красивое мобильное меню с категориями, ценами и составом</li>
+        <li>Корзина и оформление заказа</li>
+        <li>Выбор оплаты: онлайн или наличными</li>
+        <li>Мгновенные уведомления о заказах в Telegram</li>
+        <li>Админка — можете сами менять блюда и цены</li>
+        <li>Обучение персонала</li>
+        <li>Техническая поддержка</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section style="background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line)">
+  <div class="wrap">
+    <h2>Цены</h2>
+    <p class="section-sub">Прозрачно и без скрытых платежей</p>
+    <div class="pricing">
+
+      <div class="price-card">
+        <h3>Старт</h3>
+        <div class="sub">Разовая установка</div>
+        <div class="amount">240 <span>BYN</span></div>
+        <ul>
+          <li>Установка на 8–10 столов</li>
+          <li>NFC-метки с программированием</li>
+          <li>Настройка меню под ваше заведение</li>
+          <li>Корзина + заказ + выбор оплаты</li>
+          <li>Обучение персонала</li>
+          <li>Подключение уведомлений в Telegram</li>
+        </ul>
+      </div>
+
+      <div class="price-card popular">
+        <h3>Стандарт</h3>
+        <div class="sub">Самый популярный выбор</div>
+        <div class="amount">340 <span>BYN</span></div>
+        <div class="old">вместо 420 BYN</div>
+        <ul>
+          <li>Всё из пакета «Старт»</li>
+          <li>3 месяца обслуживания в подарок</li>
+          <li>Приоритетная поддержка</li>
+          <li>Обновление меню без доплат</li>
+          <li>Проверка всех меток</li>
+        </ul>
+        <div class="note">Выгодно: 3 месяца обслуживания уже включены</div>
+      </div>
+
+      <div class="price-card">
+        <h3>Годовой</h3>
+        <div class="sub">Максимальная выгода</div>
+        <div class="amount">790 <span>BYN</span></div>
+        <div class="old">вместо 960 BYN</div>
+        <ul>
+          <li>Всё из пакета «Старт»</li>
+          <li>12 месяцев полного обслуживания</li>
+          <li>Все обновления и доработки</li>
+          <li>Проверка меток каждую неделю</li>
+          <li>Замена повреждённых меток</li>
+        </ul>
+      </div>
+
+    </div>
+
+    <div style="margin-top:20px">
+      <div class="maint">
+        <div>
+          <strong>Ежемесячное обслуживание</strong><br>
+          <span style="font-size:.8rem;color:var(--muted)">После окончания пакета</span>
+        </div>
+        <div class="price">60 BYN/мес</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT'S IN MAINTENANCE -->
+<section>
+  <div class="wrap">
+    <h2>Что входит в обслуживание</h2>
+    <div class="features">
+      <ul>
+        <li>Работа Telegram-бота с заказами</li>
+        <li>Обновление меню и цен</li>
+        <li>Проверка всех NFC-меток 1 раз в неделю</li>
+        <li>Исправление технических ошибок</li>
+        <li>Консультации по использованию</li>
+        <li>Замена вышедших из строя меток</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<div class="wrap">
+  <div class="cta">
+    <h2>Хотите попробовать?</h2>
+    <p>Поставим систему на 2–3 стола<br>бесплатно на 7–10 дней</p>
+    <a href="https://t.me/Gde_Nikita" class="btn" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.161c-.18 1.897-.962 6.502-1.359 8.627-.168.9-.5 1.201-.82 1.23-.697.064-1.226-.461-1.901-.903-1.056-.693-1.653-1.124-2.678-1.8-1.185-.781-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.139-5.062 3.345-.479.329-.913.489-1.302.481-.428-.009-1.252-.242-1.865-.44-.752-.244-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.831-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635.099-.002.321.023.465.141.121.099.155.232.171.326.016.093.036.305.02.47z"/></svg>
+      Написать в Telegram
+    </a>
+    <span class="handle">@Gde_Nikita</span>
+  </div>
+</div>
+
+<footer>
+  <p>Гомель · NFC Меню для кафе и ресторанов</p>
+</footer>
+
+</body>
+</html>
