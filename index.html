@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Меню кафе</title>
+<style>
+:root{--bg:#f6f5f2;--card:#fff;--text:#1d1d1f;--muted:#6b6b70;--line:#e7e5e0;--pri:#1d1d1f;--onpri:#fff;--acc:#d9362b;--ok:#2a9d8f;--r:14px;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#121214;--card:#1c1c1f;--text:#f2f2f3;--muted:#9a9aa0;--line:#2c2c30;--pri:#f2f2f3;--onpri:#121214}}
+:root[data-theme="dark"]{--bg:#121214;--card:#1c1c1f;--text:#f2f2f3;--muted:#9a9aa0;--line:#2c2c30;--pri:#f2f2f3;--onpri:#121214}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{background:var(--bg);color:var(--text);font:16px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;padding-bottom:96px}
+button,input,textarea{font:inherit;color:inherit}
+button{cursor:pointer;border:0;min-height:44px}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:var(--card);border-bottom:1px solid var(--line);padding:12px 16px}
+.wrap{max-width:720px;margin:0 auto}
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px}
+h1{font-size:1.2rem}
+.cats{display:flex;gap:8px;overflow-x:auto;margin-top:10px;scrollbar-width:none;padding-bottom:2px}
+.cats::-webkit-scrollbar{display:none}
+.chip{white-space:nowrap;padding:0 16px;border-radius:22px;background:var(--bg);border:1px solid var(--line);color:var(--text)}
+.chip.on{background:var(--pri);color:var(--onpri);border-color:var(--pri)}
+.menu{padding:14px 16px;display:grid;gap:12px;max-width:720px;margin:0 auto}
+@media(min-width:640px){.menu{grid-template-columns:1fr 1fr}}
+.item{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:12px;display:flex;gap:12px}
+.ph{width:88px;height:88px;border-radius:10px;background:var(--bg);flex:none;object-fit:cover;display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:700;color:var(--muted)}
+.info{flex:1;min-width:0;display:flex;flex-direction:column}
+.name{font-weight:600}
+.desc{font-size:.85rem;color:var(--muted);margin:2px 0 6px}
+.row{margin-top:auto;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.price{font-weight:700;color:var(--acc)}
+.btn{background:var(--pri);color:var(--onpri);border-radius:10px;padding:0 16px;font-weight:600}
+.btn.sec{background:var(--bg);color:var(--text);border:1px solid var(--line)}
+.btn.acc{background:var(--acc);color:#fff}
+.btn.sm{min-height:36px;padding:0 12px;font-size:.85rem}
+.qty{display:flex;align-items:center;gap:10px}
+.qty button{width:36px;min-height:36px;border-radius:50%;background:var(--bg);border:1px solid var(--line)}
+.bar{position:fixed;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom,0px));z-index:60;max-width:696px;margin:0 auto}
+.bar .btn{width:100%;min-height:52px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 6px 20px rgba(0,0,0,.25);border-radius:16px}
+.bar.hide{display:none}
+.shade{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:100;display:none}
+.shade.on{display:block}
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:110;background:var(--card);border-radius:20px 20px 0 0;max-height:90%;overflow-y:auto;padding:16px 16px calc(16px + env(safe-area-inset-bottom,0px));transform:translateY(105%);transition:transform .25s;max-width:720px;margin:0 auto}
+.sheet.on{transform:none}
+.sh{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.x{background:none;font-size:1.4rem;width:44px}
+.ci{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px 0;border-bottom:1px solid var(--line)}
+.total{text-align:right;font-weight:700;font-size:1.15rem;margin:12px 0}
+input,textarea,select{width:100%;padding:12px;margin-bottom:10px;background:var(--bg);border:1px solid var(--line);border-radius:10px;font-size:16px}
+label{display:block;font-size:.8rem;color:var(--muted);margin-bottom:3px}
+.pay{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.msg{font-size:.85rem;color:var(--muted);margin:8px 0}
+.ok{text-align:center;padding:24px 0}
+.ok b{display:block;font-size:2.4rem;color:var(--ok)}
+.foot{text-align:center;padding:20px;font-size:.8rem}
+.foot button{background:none;color:var(--muted);text-decoration:underline;min-height:36px}
+.adm{padding:10px 0;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:8px}
+.hidden{display:none!important}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <div class="top"><h1 id="cafe"></h1><span class="msg" id="mode"></span><span class="chip on" id="tableBadge" style="display:none;min-height:30px;line-height:30px"></span></div>
+  <div class="cats" id="cats"></div>
+</div></header>
+<main class="menu" id="menu"></main>
+<div class="foot"><button id="admBtn">Вход для администратора</button></div>
+
+<div class="bar hide" id="bar"><button class="btn" id="openCart"><span id="barCnt"></span><span id="barSum"></span></button></div>
+<div class="shade" id="shade"></div>
+
+<!-- Корзина -->
+<section class="sheet" id="cartSheet">
+  <div class="sh"><h2>Ваш заказ</h2><button class="x" data-close>✕</button></div>
+  <div id="cartView">
+    <div id="cartItems"></div>
+    <div class="total" id="cartTotal"></div>
+    <label>Номер стола</label><input id="cTable" inputmode="numeric" maxlength="10" placeholder="Например, 5">
+    <label>Имя</label><input id="cName" autocomplete="name">
+    <label>Телефон</label><input id="cPhone" type="tel" autocomplete="tel" inputmode="tel">
+    <label>Комментарий</label><textarea id="cNote" rows="2"></textarea>
+    <div class="pay">
+      <button class="btn acc" id="payOnline">Оплатить онлайн</button>
+      <button class="btn sec" id="payCash">Наличными</button>
+    </div>
+    <div class="msg" id="payMsg"></div>
+  </div>
+  <div class="ok hidden" id="okView"><b>✓</b><h2>Заказ принят</h2><p id="okText"></p><p class="msg" id="okId"></p>
+    <button class="btn" style="margin-top:14px" id="newOrder">Новый заказ</button></div>
+</section>
+
+<!-- Админка -->
+<section class="sheet" id="admSheet">
+  <div class="sh"><h2>Администратор</h2><button class="x" data-close>✕</button></div>
+  <div id="admLogin">
+    <label>Пароль</label><input id="admPass" type="password" autocomplete="off">
+    <button class="btn" id="admGo" style="width:100%">Войти</button>
+    <div class="msg" id="admErr"></div>
+  </div>
+  <div id="admMain" class="hidden">
+    <label>Название заведения</label><input id="admName">
+    <div class="sh"><b>Блюда</b><button class="btn sm" id="addDish">+ Добавить</button></div>
+    <div id="admList"></div>
+    <div id="admForm" class="hidden" style="margin-top:12px">
+      <label>Название</label><input id="fName">
+      <label>Описание</label><input id="fDesc">
+      <label>Категория</label><input id="fCat">
+      <label>Цена, BYN</label><input id="fPrice" type="number" step="0.01" inputmode="decimal">
+      <label>Ссылка на фото (необязательно)</label><input id="fImg" inputmode="url">
+      <div class="pay"><button class="btn" id="fSave">Сохранить</button><button class="btn sec" id="fCancel">Отмена</button></div>
+    </div>
+    <div class="pay" style="margin-top:14px">
+      <button class="btn sec sm" id="expJson">Копировать JSON меню</button>
+      <button class="btn sec sm" id="impJson">Вставить JSON меню</button>
+    </div>
+    <div class="msg" id="admMsg"></div>
+    <button class="btn sec sm" id="admOut" style="margin-top:8px">Выйти</button>
+  </div>
+</section>
+
+<script>
+/* ============ НАСТРОЙКИ ============ */
+const CONFIG = {
+  cafeName: "Кафе «Гомель»",
+  currency: "BYN",
+  apiUrl: "https://cafe-nfc-menu-api.gde-nikita.workers.dev",                     // адрес Worker, например "https://cafe-nfc-menu-api.ИМЯ.workers.dev"
+  demoAdminPassword: "1234",      // работает ТОЛЬКО если apiUrl пустой (демо-режим). С сервером пароль проверяет сервер.
+  storageKey: "cafe_menu_v1"
+};
+
+/* ===== Интеграция bePaid (заготовка) =====
+   Ключи магазина (shop_id / secret_key) НИКОГДА не кладём во фронтенд.
+   Схема: фронтенд -> ваш сервер (endpoint) -> bePaid API -> redirect_url -> клиент платит.
+   Деньги идут на счёт заведения, т.к. сервер использует его shop_id и secret_key.
+   Сервер получает уведомление (notification_url) и подтверждает статус заказа. */
+const PAYMENT = {
+  provider: "bepaid",
+  endpoint: "",                    // например "https://your-server.by/api/create-payment"
+  async createCheckout(order){
+    if(!this.endpoint) return {ok:false, reason:"not_configured"};
+    const res = await fetch(this.endpoint,{
+      method:"POST", headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({orderId:order.id, amount:order.total, currency:CONFIG.currency,
+        description:"Заказ "+order.id, items:order.items.map(i=>({id:i.id,qty:i.qty}))})
+    });
+    if(!res.ok) return {ok:false, reason:"server_error"};
+    const data = await res.json();      // ожидается { redirect_url: "https://checkout.bepaid.by/..." }
+    return data.redirect_url ? {ok:true, url:data.redirect_url} : {ok:false, reason:"no_url"};
+  }
+};
+
+/* Отправка заказа на сервер -> Telegram-группа персонала */
+const ORDERS = {
+  async submit(order){
+    if(!CONFIG.apiUrl){ console.log("ORDER (демо)", order); return {ok:true, id:order.id}; }
+    try{
+      const r = await fetch(CONFIG.apiUrl+"/order",{method:"POST",headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({table:order.table,type:order.type,name:order.name,phone:order.phone,comment:order.comment,
+          items:order.items.map(i=>({id:i.id,name:i.name,price:i.price,qty:i.qty}))})});
+      const d = await r.json();
+      return r.ok && d.ok ? {ok:true,id:d.id} : {ok:false};
+    }catch(e){ return {ok:false}; }
+  }
+};
+
+/* ============ ДАННЫЕ ============ */
+const DEFAULT_MENU = [
+  {id:1,category:"Горячее",name:"Стейк из говядины",desc:"Мраморная говядина, овощи гриль",price:28.5,img:""},
+  {id:2,category:"Горячее",name:"Паста Карбонара",desc:"Спагетти, бекон, сливочный соус, пармезан",price:18,img:""},
+  {id:3,category:"Салаты",name:"Цезарь с курицей",desc:"Курица, айсберг, пармезан, соус цезарь",price:14.5,img:""},
+  {id:4,category:"Напитки",name:"Лимонад домашний",desc:"Мята, лайм, газированная вода",price:6,img:""},
+  {id:5,category:"Напитки",name:"Эспрессо",desc:"Классический",price:3.5,img:""},
+  {id:6,category:"Десерты",name:"Чизкейк",desc:"Классический Нью-Йорк",price:11,img:""}
+];
+let state = {cafeName:CONFIG.cafeName, menu:DEFAULT_MENU};
+try{ const s = JSON.parse(localStorage.getItem(CONFIG.storageKey)||"null"); if(s && Array.isArray(s.menu)) state = s; }catch(e){}
+function save(){ try{ localStorage.setItem(CONFIG.storageKey, JSON.stringify(state)); }catch(e){} }
+
+const TABLE = (new URLSearchParams(location.search).get("table")||"").replace(/[^0-9A-Za-zА-Яа-я-]/g,"").slice(0,10);
+if(TABLE){ const b=document.getElementById("tableBadge"); b.textContent="Стол "+TABLE; b.style.display="inline-block"; }
+let adminPass = "";
+async function loadRemoteMenu(){
+  if(!CONFIG.apiUrl) return;
+  try{
+    const r = await fetch(CONFIG.apiUrl+"/menu"); const d = await r.json();
+    if(d && Array.isArray(d.menu)){ state = {cafeName:d.cafeName||CONFIG.cafeName, menu:d.menu}; cart=[]; renderCats(); refresh(); }
+  }catch(e){ /* остаёмся на локальном меню */ }
+}
+async function pushRemoteMenu(){
+  if(!CONFIG.apiUrl) return true;
+  try{
+    const r = await fetch(CONFIG.apiUrl+"/menu",{method:"PUT",headers:{"Content-Type":"application/json","X-Admin-Password":adminPass},body:JSON.stringify(state)});
+    return r.ok;
+  }catch(e){ return false; }
+}
+let cart = [], cat = "Все", isAdmin = false, editId = null;
+const $ = id => document.getElementById(id);
+const esc = s => String(s??"").replace(/[&<>"']/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const money = n => n.toFixed(2)+" "+CONFIG.currency;
+
+/* ============ МЕНЮ ============ */
+function renderCats(){
+  const cats = ["Все", ...new Set(state.menu.map(i=>i.category))];
+  if(!cats.includes(cat)) cat = "Все";
+  $("cats").innerHTML = cats.map(c=>`<button class="chip ${c===cat?"on":""}" data-cat="${esc(c)}">${esc(c)}</button>`).join("");
+}
+function thumb(i){
+  const letter = esc((i.name||"?").trim().charAt(0).toUpperCase());
+  return i.img ? `<img class="ph" src="${esc(i.img)}" alt="" loading="lazy" onerror="this.outerHTML='<div class=&quot;ph&quot;>${letter}</div>'">` : `<div class="ph">${letter}</div>`;
+}
+function renderMenu(){
+  $("cafe").textContent = state.cafeName;
+  document.title = state.cafeName;
+  const list = cat==="Все" ? state.menu : state.menu.filter(i=>i.category===cat);
+  $("menu").innerHTML = list.map(i=>{
+    const q = (cart.find(c=>c.id===i.id)||{}).qty||0;
+    const ctl = q ? `<div class="qty"><button data-dec="${i.id}">−</button><b>${q}</b><button data-inc="${i.id}">+</button></div>`
+                  : `<button class="btn sm" data-inc="${i.id}">Добавить</button>`;
+    return `<article class="item">${thumb(i)}<div class="info"><div class="name">${esc(i.name)}</div><div class="desc">${esc(i.desc)}</div><div class="row"><span class="price">${money(i.price)}</span>${ctl}</div></div></article>`;
+  }).join("") || '<p class="msg">Меню пока пустое.</p>';
+}
+
+/* ============ КОРЗИНА ============ */
+const total = () => cart.reduce((s,i)=>s+i.price*i.qty,0);
+const count = () => cart.reduce((s,i)=>s+i.qty,0);
+function change(id,d){
+  const it = state.menu.find(m=>m.id===id); if(!it) return;
+  const ex = cart.find(c=>c.id===id);
+  if(ex){ ex.qty += d; if(ex.qty<=0) cart = cart.filter(c=>c.id!==id); }
+  else if(d>0) cart.push({...it,qty:1});
+  refresh();
+}
+function refresh(){
+  renderMenu();
+  $("bar").classList.toggle("hide", count()===0);
+  $("barCnt").textContent = "Корзина · "+count();
+  $("barSum").textContent = money(total());
+  $("cartItems").innerHTML = cart.map(i=>`<div class="ci"><div><b>${esc(i.name)}</b><div class="msg">${money(i.price)}</div></div>
+    <div class="qty"><button data-dec="${i.id}">−</button><b>${i.qty}</b><button data-inc="${i.id}">+</button></div></div>`).join("");
+  $("cartTotal").textContent = "Итого: "+money(total());
+  if(!cart.length && $("cartSheet").classList.contains("on")) closeAll();
+}
+function openSheet(id){ $("shade").classList.add("on"); $(id).classList.add("on"); }
+function closeAll(){ $("shade").classList.remove("on"); document.querySelectorAll(".sheet").forEach(s=>s.classList.remove("on")); }
+
+async function placeOrder(type){
+  if(!cart.length) return;
+  const table = $("cTable").value.trim() || TABLE;
+  if(!/^[0-9A-Za-zА-Яа-я-]{1,10}$/.test(table)){ $("payMsg").textContent="Укажите номер стола"; $("cTable").focus(); return; }
+  const order = {id:"ORD-"+Date.now().toString().slice(-6), type, status:"new", table,
+    name:$("cName").value.trim(), phone:$("cPhone").value.trim(), comment:$("cNote").value.trim(),
+    items:cart.map(({id,name,price,qty})=>({id,name,price,qty})), total:+total().toFixed(2), createdAt:new Date().toISOString()};
+  $("payMsg").textContent = "Отправляем...";
+  let text = "";
+  if(type==="online"){
+    const pay = await PAYMENT.createCheckout(order);
+    if(pay.ok){ location.href = pay.url; return; }
+    if(pay.reason!=="not_configured"){ $("payMsg").textContent="Не удалось создать платёж. Попробуйте ещё раз или выберите оплату наличными."; return; }
+    order.status="pending_payment";
+    text = "Онлайн-оплата скоро будет доступна. Заказ принят, оплатите "+money(order.total)+" на месте.";
+  } else text = "Оплатите "+money(order.total)+" наличными при получении.";
+  const sent = await ORDERS.submit(order);
+  if(!sent.ok){ $("payMsg").textContent="Не удалось отправить заказ. Проверьте соединение и попробуйте ещё раз."; return; }
+  order.id = sent.id;
+  $("payMsg").textContent="";
+  $("cartView").classList.add("hidden"); $("okView").classList.remove("hidden");
+  $("okText").textContent = text; $("okId").textContent = "Номер заказа: "+order.id;
+}
+
+/* ============ АДМИНКА ============ */
+function admRender(){
+  $("admName").value = state.cafeName;
+  $("admList").innerHTML = state.menu.map(i=>`<div class="adm"><div style="min-width:0"><b>${esc(i.name)}</b><div class="msg">${esc(i.category)} · ${money(i.price)}</div></div>
+    <div style="display:flex;gap:6px"><button class="btn sec sm" data-edit="${i.id}">Изм.</button><button class="btn sec sm" data-del="${i.id}">Удал.</button></div></div>`).join("");
+}
+function openForm(id){
+  editId = id; const i = state.menu.find(m=>m.id===id)||{name:"",desc:"",category:"",price:"",img:""};
+  $("fName").value=i.name; $("fDesc").value=i.desc; $("fCat").value=i.category; $("fPrice").value=i.price; $("fImg").value=i.img||"";
+  $("admForm").classList.remove("hidden"); $("fName").focus();
+}
+function adminState(){ $("admLogin").classList.toggle("hidden",isAdmin); $("admMain").classList.toggle("hidden",!isAdmin); $("mode").textContent = isAdmin?"режим админа":""; if(isAdmin) admRender(); }
+async function commit(){
+  save(); renderCats(); refresh(); admRender();
+  if(CONFIG.apiUrl && isAdmin){ $("admMsg").textContent = (await pushRemoteMenu()) ? "Сохранено на сервере" : "Не удалось сохранить на сервере"; }
+}
+
+/* ============ СОБЫТИЯ ============ */
+document.addEventListener("click", async e=>{
+  const t = e.target.closest("button"); if(!t) return;
+  if(t.dataset.cat){ cat=t.dataset.cat; renderCats(); renderMenu(); }
+  else if(t.dataset.inc) change(+t.dataset.inc,1);
+  else if(t.dataset.dec) change(+t.dataset.dec,-1);
+  else if(t.dataset.close!==undefined) closeAll();
+  else if(t.dataset.edit) openForm(+t.dataset.edit);
+  else if(t.dataset.del){ if(confirm("Удалить блюдо?")){ state.menu = state.menu.filter(m=>m.id!==+t.dataset.del); cart = cart.filter(c=>c.id!==+t.dataset.del); commit(); } }
+});
+$("shade").onclick = closeAll;
+$("openCart").onclick = ()=>{ if(TABLE && !$("cTable").value) $("cTable").value=TABLE; openSheet("cartSheet"); };
+$("payOnline").onclick = ()=>placeOrder("online");
+$("payCash").onclick = ()=>placeOrder("cash");
+$("newOrder").onclick = ()=>{ cart=[]; $("cartView").classList.remove("hidden"); $("okView").classList.add("hidden"); closeAll(); refresh(); };
+$("admBtn").onclick = ()=>{ openSheet("admSheet"); adminState(); };
+$("admGo").onclick = async ()=>{
+  const p = $("admPass").value; let ok = false;
+  if(CONFIG.apiUrl){
+    try{ const r = await fetch(CONFIG.apiUrl+"/auth",{method:"POST",headers:{"X-Admin-Password":p}}); ok = r.ok; }
+    catch(e){ $("admErr").textContent="Нет связи с сервером"; return; }
+  } else ok = (p===CONFIG.demoAdminPassword);
+  if(ok){ isAdmin=true; adminPass=p; $("admPass").value=""; $("admErr").textContent=""; adminState(); }
+  else $("admErr").textContent="Неверный пароль";
+};
+$("admOut").onclick = ()=>{ isAdmin=false; adminPass=""; adminState(); closeAll(); };
+$("admName").onchange = ()=>{ state.cafeName = $("admName").value.trim()||CONFIG.cafeName; commit(); };
+$("addDish").onclick = ()=>openForm(null);
+$("fCancel").onclick = ()=>$("admForm").classList.add("hidden");
+$("fSave").onclick = ()=>{
+  const name=$("fName").value.trim(), price=parseFloat($("fPrice").value);
+  if(!name || isNaN(price) || price<0){ $("admMsg").textContent="Укажите название и корректную цену"; return; }
+  const data={name,desc:$("fDesc").value.trim(),category:$("fCat").value.trim()||"Без категории",price,img:$("fImg").value.trim()};
+  if(editId){ Object.assign(state.menu.find(m=>m.id===editId),data); cart.forEach(c=>{ if(c.id===editId) Object.assign(c,data); }); }
+  else state.menu.push({id:Date.now(),...data});
+  $("admMsg").textContent=""; $("admForm").classList.add("hidden"); commit();
+};
+$("expJson").onclick = async ()=>{ try{ await navigator.clipboard.writeText(JSON.stringify(state,null,1)); $("admMsg").textContent="JSON скопирован"; }catch(e){ $("admMsg").textContent="Не удалось скопировать"; } };
+$("impJson").onclick = ()=>{
+  const raw = prompt("Вставьте JSON меню:"); if(!raw) return;
+  try{ const s=JSON.parse(raw); if(!Array.isArray(s.menu)) throw 0; state={cafeName:String(s.cafeName||CONFIG.cafeName),menu:s.menu}; cart=[]; commit(); $("admMsg").textContent="Меню загружено"; }
+  catch(e){ $("admMsg").textContent="Неверный формат JSON"; }
+};
+
+renderCats(); refresh(); loadRemoteMenu();
+</script>
+</body>
+</html>
