@@ -3,79 +3,225 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NFC Меню — для кафе и ресторанов Гомеля</title>
+<title>NFC Меню — гости заказывают сами</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
-:root{--bg:#f7f6f3;--card:#fff;--text:#1a1a1a;--muted:#6b6b6b;--accent:#d9362b;--dark:#1d1d1f;--line:#e8e6e1;--ok:#2a9d8f;--tg:#2AABEE}
+:root{
+  --bg:#0f0f10;
+  --card:#1a1a1d;
+  --card2:#222226;
+  --text:#f2f2f3;
+  --muted:#9a9aa0;
+  --accent:#ff3b30;
+  --accent2:#ff6b5a;
+  --ok:#30d158;
+  --tg:#2AABEE;
+  --line:#2c2c30;
+  --gold:#f5c542;
+}
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:var(--bg);color:var(--text);line-height:1.55}
 a{color:inherit;text-decoration:none}
-.wrap{max-width:720px;margin:0 auto;padding:0 16px}
+.wrap{max-width:740px;margin:0 auto;padding:0 18px}
 
-/* Hero */
-.hero{background:var(--dark);color:#fff;padding:48px 16px 56px;text-align:center}
-.hero .badge{display:inline-block;background:var(--accent);font-size:.75rem;font-weight:600;padding:5px 14px;border-radius:20px;margin-bottom:16px}
-.hero h1{font-size:1.85rem;font-weight:800;line-height:1.25;margin-bottom:12px}
-.hero p{opacity:.85;font-size:1.05rem;max-width:480px;margin:0 auto 24px}
-.hero .btn{display:inline-flex;align-items:center;gap:8px;background:var(--tg);color:#fff;padding:14px 28px;border-radius:12px;font-weight:600;font-size:1rem}
-.hero .btn svg{width:20px;height:20px;fill:currentColor}
+/* HERO */
+.hero{
+  position:relative;
+  padding:56px 18px 64px;
+  text-align:center;
+  overflow:hidden;
+  background:radial-gradient(ellipse 80% 60% at 50% -10%, rgba(255,59,48,.25), transparent),
+             radial-gradient(ellipse 60% 40% at 80% 60%, rgba(42,171,238,.12), transparent),
+             var(--bg);
+}
+.hero .badge{
+  display:inline-block;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  font-size:.72rem;font-weight:700;letter-spacing:.04em;
+  padding:6px 14px;border-radius:20px;margin-bottom:18px;
+  text-transform:uppercase;
+}
+.hero h1{
+  font-size:clamp(1.7rem,5vw,2.35rem);
+  font-weight:800;line-height:1.2;margin-bottom:14px;
+}
+.hero h1 span{color:var(--accent)}
+.hero .lead{
+  font-size:1.08rem;color:var(--muted);max-width:460px;margin:0 auto 28px;
+}
+.hero .btn{
+  display:inline-flex;align-items:center;gap:10px;
+  background:var(--tg);color:#fff;
+  padding:15px 30px;border-radius:14px;
+  font-weight:700;font-size:1.05rem;
+  box-shadow:0 8px 28px rgba(42,171,238,.35);
+}
+.hero .btn svg{width:22px;height:22px;fill:currentColor}
+.hero .sub{margin-top:14px;font-size:.85rem;color:var(--muted)}
+
+/* Phone mock */
+.phone-wrap{margin:36px auto 0;max-width:260px;position:relative}
+.phone{
+  background:var(--card2);
+  border:3px solid #333;
+  border-radius:28px;
+  padding:12px 10px 16px;
+  box-shadow:0 20px 50px rgba(0,0,0,.5);
+}
+.phone-notch{width:90px;height:8px;background:#333;border-radius:4px;margin:0 auto 12px}
+.phone-screen{background:#121214;border-radius:16px;padding:12px;min-height:280px}
+.phone-header{font-size:.8rem;font-weight:600;margin-bottom:10px;display:flex;justify-content:space-between}
+.phone-item{display:flex;gap:8px;padding:8px 0;border-bottom:1px solid #2a2a2e;font-size:.75rem}
+.phone-item .pic{width:42px;height:42px;border-radius:8px;background:linear-gradient(135deg,#333,#222);flex:none;display:flex;align-items:center;justify-content:center;font-size:1.1rem}
+.phone-item .name{font-weight:600}
+.phone-item .price{color:var(--accent);font-weight:700;font-size:.7rem;margin-top:2px}
+.phone-bar{
+  margin-top:12px;background:var(--accent);color:#fff;
+  text-align:center;padding:10px;border-radius:10px;font-size:.8rem;font-weight:600;
+}
 
 /* Sections */
-section{padding:40px 0}
-h2{font-size:1.4rem;font-weight:700;margin-bottom:8px;text-align:center}
+section{padding:48px 0}
+h2{font-size:1.45rem;font-weight:800;text-align:center;margin-bottom:8px}
 .section-sub{text-align:center;color:var(--muted);margin-bottom:28px;font-size:.95rem}
 
-/* How it works */
+/* Steps */
 .steps{display:grid;gap:14px}
-.step{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 18px 18px 64px;position:relative}
-.step .num{position:absolute;left:16px;top:18px;width:36px;height:36px;background:var(--dark);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.95rem}
-.step h3{font-size:1rem;font-weight:600;margin-bottom:4px}
+.step{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:16px;
+  padding:20px 18px 20px 68px;
+  position:relative;
+}
+.step .num{
+  position:absolute;left:16px;top:20px;
+  width:40px;height:40px;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  color:#fff;border-radius:12px;
+  display:flex;align-items:center;justify-content:center;
+  font-weight:800;font-size:1.05rem;
+}
+.step h3{font-size:1.05rem;font-weight:700;margin-bottom:4px}
 .step p{font-size:.9rem;color:var(--muted)}
 
 /* Benefits */
 .benefits{display:grid;gap:12px}
 @media(min-width:560px){.benefits{grid-template-columns:1fr 1fr}}
-.benefit{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px}
-.benefit .icon{font-size:1.5rem;margin-bottom:8px}
-.benefit h3{font-size:.95rem;font-weight:600;margin-bottom:4px}
-.benefit p{font-size:.85rem;color:var(--muted)}
+.benefit{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:16px;
+  padding:20px;
+}
+.benefit .icon{
+  width:44px;height:44px;border-radius:12px;
+  background:var(--card2);
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.35rem;margin-bottom:12px;
+}
+.benefit h3{font-size:1rem;font-weight:700;margin-bottom:6px}
+.benefit p{font-size:.88rem;color:var(--muted)}
 
-/* Features list */
-.features{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px;margin-top:8px}
-.features ul{list-style:none}
-.features li{padding:10px 0 10px 28px;position:relative;border-bottom:1px solid var(--line);font-size:.95rem}
-.features li:last-child{border-bottom:0}
-.features li::before{content:"✓";position:absolute;left:0;color:var(--ok);font-weight:700}
+/* Feature strip */
+.feature-strip{
+  background:linear-gradient(135deg,#1a1a1d,#222);
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:28px 22px;
+}
+.feature-strip ul{list-style:none}
+.feature-strip li{
+  padding:11px 0 11px 32px;
+  position:relative;
+  border-bottom:1px solid var(--line);
+  font-size:.95rem;
+}
+.feature-strip li:last-child{border-bottom:0}
+.feature-strip li::before{
+  content:"✓";position:absolute;left:0;
+  color:var(--ok);font-weight:800;font-size:1.1rem;
+}
 
 /* Pricing */
 .pricing{display:grid;gap:14px}
-.price-card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px;position:relative;overflow:hidden}
-.price-card.popular{border:2px solid var(--accent)}
-.price-card.popular::before{content:"ВЫГОДНО";position:absolute;top:12px;right:-30px;background:var(--accent);color:#fff;font-size:.65rem;font-weight:700;padding:4px 36px;transform:rotate(45deg)}
-.price-card h3{font-size:1.15rem;font-weight:700;margin-bottom:2px}
-.price-card .sub{color:var(--muted);font-size:.85rem;margin-bottom:12px}
-.price-card .amount{font-size:1.9rem;font-weight:800;margin-bottom:4px}
-.price-card .amount span{font-size:.95rem;font-weight:500;color:var(--muted)}
-.price-card .old{text-decoration:line-through;color:var(--muted);font-size:.9rem;margin-bottom:12px}
-.price-card ul{list-style:none;margin:12px 0 0}
-.price-card li{padding:6px 0 6px 24px;position:relative;font-size:.9rem}
+.price-card{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:26px 22px;
+  position:relative;
+  overflow:hidden;
+}
+.price-card.popular{
+  border:2px solid var(--accent);
+  background:linear-gradient(180deg,rgba(255,59,48,.08),var(--card));
+}
+.price-card.popular::before{
+  content:"ХИТ";
+  position:absolute;top:14px;right:-26px;
+  background:var(--accent);color:#fff;
+  font-size:.7rem;font-weight:800;
+  padding:5px 34px;transform:rotate(45deg);
+}
+.price-card h3{font-size:1.2rem;font-weight:800;margin-bottom:2px}
+.price-card .sub{color:var(--muted);font-size:.85rem;margin-bottom:14px}
+.price-card .amount{font-size:2.1rem;font-weight:800;margin-bottom:2px}
+.price-card .amount span{font-size:1rem;font-weight:500;color:var(--muted)}
+.price-card .old{text-decoration:line-through;color:var(--muted);font-size:.9rem;margin-bottom:14px}
+.price-card ul{list-style:none;margin-top:8px}
+.price-card li{padding:7px 0 7px 26px;position:relative;font-size:.9rem}
 .price-card li::before{content:"✓";position:absolute;left:0;color:var(--ok);font-weight:700}
-.note{background:#f0faf8;border-radius:10px;padding:10px 12px;font-size:.85rem;color:#1a6b5f;margin-top:12px}
+.note{
+  background:rgba(48,209,88,.1);
+  border-radius:10px;
+  padding:11px 13px;
+  font-size:.85rem;
+  color:var(--ok);
+  margin-top:14px;
+}
 
-/* Maintenance */
-.maint{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.maint{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:18px;
+  display:flex;justify-content:space-between;align-items:center;gap:12px;
+  margin-top:16px;
+}
 .maint strong{font-size:.95rem}
-.maint .price{font-weight:700;color:var(--accent);white-space:nowrap}
+.maint .price{font-weight:800;color:var(--accent);white-space:nowrap;font-size:1.1rem}
 
-/* CTA */
-.cta{background:var(--dark);color:#fff;border-radius:16px;padding:32px 24px;text-align:center;margin:32px 0}
-.cta h2{font-size:1.3rem;margin-bottom:8px}
-.cta p{opacity:.85;margin-bottom:20px;font-size:.95rem}
-.cta .btn{display:inline-flex;align-items:center;gap:8px;background:var(--tg);color:#fff;padding:14px 28px;border-radius:12px;font-weight:600}
-.cta .btn svg{width:20px;height:20px;fill:currentColor}
-.cta .handle{display:block;margin-top:12px;font-size:.9rem;opacity:.7}
+/* Big CTA */
+.cta{
+  background:linear-gradient(145deg,#1a1a1d,#252528);
+  border:1px solid var(--line);
+  border-radius:20px;
+  padding:36px 24px;
+  text-align:center;
+  margin:20px 0 40px;
+}
+.cta h2{font-size:1.4rem;margin-bottom:8px}
+.cta p{color:var(--muted);margin-bottom:22px;font-size:1rem}
+.cta .btn{
+  display:inline-flex;align-items:center;gap:10px;
+  background:var(--tg);color:#fff;
+  padding:15px 30px;border-radius:14px;
+  font-weight:700;font-size:1.05rem;
+  box-shadow:0 8px 28px rgba(42,171,238,.3);
+}
+.cta .btn svg{width:22px;height:22px;fill:currentColor}
+.cta .handle{display:block;margin-top:12px;font-size:.9rem;color:var(--muted)}
+.cta .free{
+  display:inline-block;
+  margin-top:16px;
+  background:rgba(245,197,66,.12);
+  color:var(--gold);
+  font-size:.85rem;font-weight:600;
+  padding:8px 16px;border-radius:20px;
+}
 
-footer{text-align:center;padding:24px 16px 40px;color:var(--muted);font-size:.85rem}
+footer{text-align:center;padding:16px 18px 48px;color:var(--muted);font-size:.85rem}
 </style>
 </head>
 <body>
@@ -83,66 +229,94 @@ footer{text-align:center;padding:24px 16px 40px;color:var(--muted);font-size:.85
 <!-- HERO -->
 <div class="hero">
   <div class="wrap">
-    <div class="badge">Гомель · 2026</div>
-    <h1>Электронное меню<br>с заказом прямо со стола</h1>
-    <p>Гость прикладывает телефон к метке — открывается меню, он делает заказ и выбирает способ оплаты. Заказ сразу приходит вам в Telegram.</p>
+    <div class="badge">Гомель · Новинка 2026</div>
+    <h1>Гости заказывают<br><span>сами со стола</span></h1>
+    <p class="lead">Приложил телефон — увидел меню — сделал заказ. Вы получаете уведомление в Telegram. Без ожидания официанта.</p>
     <a href="https://t.me/Gde_Nikita" class="btn" target="_blank" rel="noopener">
       <svg viewBox="0 0 24 24"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.161c-.18 1.897-.962 6.502-1.359 8.627-.168.9-.5 1.201-.82 1.23-.697.064-1.226-.461-1.901-.903-1.056-.693-1.653-1.124-2.678-1.8-1.185-.781-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.139-5.062 3.345-.479.329-.913.489-1.302.481-.428-.009-1.252-.242-1.865-.44-.752-.244-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.831-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635.099-.002.321.023.465.141.121.099.155.232.171.326.016.093.036.305.02.47z"/></svg>
-      Написать в Telegram
+      Хочу попробовать
     </a>
+    <div class="sub">Отвечаю быстро · Гомель</div>
+
+    <!-- Phone mockup -->
+    <div class="phone-wrap">
+      <div class="phone">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+          <div class="phone-header"><span>Кафе «Гомель»</span><span style="color:var(--accent);font-size:.7rem">Стол 5</span></div>
+          <div class="phone-item">
+            <div class="pic">🥩</div>
+            <div><div class="name">Стейк из говядины</div><div class="price">28.50 BYN</div></div>
+          </div>
+          <div class="phone-item">
+            <div class="pic">🍝</div>
+            <div><div class="name">Паста Карбонара</div><div class="price">18.00 BYN</div></div>
+          </div>
+          <div class="phone-item">
+            <div class="pic">🥗</div>
+            <div><div class="name">Цезарь с курицей</div><div class="price">14.50 BYN</div></div>
+          </div>
+          <div class="phone-item" style="border:0">
+            <div class="pic">🍰</div>
+            <div><div class="name">Чизкейк</div><div class="price">11.00 BYN</div></div>
+          </div>
+          <div class="phone-bar">Корзина · 2 блюда · 32.50 BYN</div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
-<!-- HOW IT WORKS -->
+<!-- HOW -->
 <section>
   <div class="wrap">
     <h2>Как это работает</h2>
-    <p class="section-sub">Всё просто — и для гостя, и для вас</p>
+    <p class="section-sub">Три простых шага — и система уже у вас</p>
     <div class="steps">
       <div class="step">
         <div class="num">1</div>
-        <h3>Гость прикладывает телефон</h3>
-        <p>К NFC-метке на столе. Открывается ваше меню с фото, ценами и составом блюд.</p>
+        <h3>Гость касается метки на столе</h3>
+        <p>На телефоне сразу открывается ваше меню с фото, ценами и составом блюд.</p>
       </div>
       <div class="step">
         <div class="num">2</div>
         <h3>Выбирает блюда и оформляет заказ</h3>
-        <p>Добавляет в корзину, указывает комментарий и выбирает: оплатить онлайн или наличными.</p>
+        <p>Добавляет в корзину, пишет комментарий и выбирает: оплатить онлайн или наличными.</p>
       </div>
       <div class="step">
         <div class="num">3</div>
-        <h3>Заказ приходит вам в Telegram</h3>
-        <p>Мгновенно. С номером стола, составом заказа и способом оплаты. Официант и кухня видят всё сразу.</p>
+        <h3>Заказ мгновенно приходит вам</h3>
+        <p>В Telegram — с номером стола, списком блюд и способом оплаты. Кухня и официанты видят всё сразу.</p>
       </div>
     </div>
   </div>
 </section>
 
 <!-- BENEFITS -->
-<section style="background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line)">
+<section style="background:#121214;border-top:1px solid var(--line);border-bottom:1px solid var(--line)">
   <div class="wrap">
-    <h2>Что это даёт заведению</h2>
-    <p class="section-sub">Реальная польза, а не просто «красиво»</p>
+    <h2>Зачем это вашему заведению</h2>
+    <p class="section-sub">Не просто «модно» — это экономит время и деньги</p>
     <div class="benefits">
       <div class="benefit">
-        <div class="icon">⏱</div>
-        <h3>Меньше нагрузки на официантов</h3>
-        <p>Гости заказывают сами. Официант не бегает с блокнотом по залу.</p>
+        <div class="icon">⚡</div>
+        <h3>Официанты не бегают зря</h3>
+        <p>Гости заказывают сами. Персонал успевает обслуживать больше столов.</p>
       </div>
       <div class="benefit">
-        <div class="icon">📱</div>
-        <h3>Современный вид</h3>
-        <p>Заведение выглядит технологично. Это нравится гостям и повышает лояльность.</p>
+        <div class="icon">📈</div>
+        <h3>Выше средний чек</h3>
+        <p>Красивые фото и удобное меню побуждают брать больше позиций.</p>
       </div>
       <div class="benefit">
-        <div class="icon">💰</div>
-        <h3>Оплата как удобно гостю</h3>
-        <p>Онлайн или наличными. Деньги от гостей идут сразу на ваш счёт.</p>
-      </div>
-      <div class="benefit">
-        <div class="icon">🔔</div>
+        <div class="icon">🛡</div>
         <h3>Заказы не теряются</h3>
-        <p>Всё приходит в Telegram с номером стола. Кухня и зал работают синхронно.</p>
+        <p>Всё фиксируется. Номер стола, состав, комментарии — в одном сообщении.</p>
+      </div>
+      <div class="benefit">
+        <div class="icon">✨</div>
+        <h3>Современный имидж</h3>
+        <p>Заведение выглядит технологично. Гости это замечают и возвращаются.</p>
       </div>
     </div>
   </div>
@@ -151,17 +325,17 @@ footer{text-align:center;padding:24px 16px 40px;color:var(--muted);font-size:.85
 <!-- WHAT'S INCLUDED -->
 <section>
   <div class="wrap">
-    <h2>Что входит в систему</h2>
+    <h2>Что вы получаете</h2>
     <p class="section-sub">Полный комплект под ключ</p>
-    <div class="features">
+    <div class="feature-strip">
       <ul>
-        <li>NFC-метки на каждый стол (программируются под ваш номер стола)</li>
-        <li>Красивое мобильное меню с категориями, ценами и составом</li>
-        <li>Корзина и оформление заказа</li>
+        <li>NFC-метки на каждый стол (со своим номером)</li>
+        <li>Красивое мобильное меню с фото, ценами и составом</li>
+        <li>Корзина и быстрое оформление заказа</li>
         <li>Выбор оплаты: онлайн или наличными</li>
-        <li>Мгновенные уведомления о заказах в Telegram</li>
-        <li>Админка — можете сами менять блюда и цены</li>
-        <li>Обучение персонала</li>
+        <li>Мгновенные уведомления в Telegram</li>
+        <li>Админка — меняйте блюда и цены сами</li>
+        <li>Обучение вашего персонала</li>
         <li>Техническая поддержка</li>
       </ul>
     </div>
@@ -169,10 +343,10 @@ footer{text-align:center;padding:24px 16px 40px;color:var(--muted);font-size:.85
 </section>
 
 <!-- PRICING -->
-<section style="background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line)">
+<section style="background:#121214;border-top:1px solid var(--line);border-bottom:1px solid var(--line)">
   <div class="wrap">
     <h2>Цены</h2>
-    <p class="section-sub">Прозрачно и без скрытых платежей</p>
+    <p class="section-sub">Прозрачно. Без сюрпризов.</p>
     <div class="pricing">
 
       <div class="price-card">
@@ -182,16 +356,16 @@ footer{text-align:center;padding:24px 16px 40px;color:var(--muted);font-size:.85
         <ul>
           <li>Установка на 8–10 столов</li>
           <li>NFC-метки с программированием</li>
-          <li>Настройка меню под ваше заведение</li>
-          <li>Корзина + заказ + выбор оплаты</li>
+          <li>Настройка меню под вас</li>
+          <li>Корзина + заказ + оплата</li>
           <li>Обучение персонала</li>
-          <li>Подключение уведомлений в Telegram</li>
+          <li>Telegram-уведомления</li>
         </ul>
       </div>
 
       <div class="price-card popular">
         <h3>Стандарт</h3>
-        <div class="sub">Самый популярный выбор</div>
+        <div class="sub">Лучший выбор для большинства</div>
         <div class="amount">340 <span>BYN</span></div>
         <div class="old">вместо 420 BYN</div>
         <ul>
@@ -201,18 +375,18 @@ footer{text-align:center;padding:24px 16px 40px;color:var(--muted);font-size:.85
           <li>Обновление меню без доплат</li>
           <li>Проверка всех меток</li>
         </ul>
-        <div class="note">Выгодно: 3 месяца обслуживания уже включены</div>
+        <div class="note">3 месяца поддержки уже включены — выгодно</div>
       </div>
 
       <div class="price-card">
         <h3>Годовой</h3>
-        <div class="sub">Максимальная выгода</div>
+        <div class="sub">Максимум спокойствия</div>
         <div class="amount">790 <span>BYN</span></div>
         <div class="old">вместо 960 BYN</div>
         <ul>
           <li>Всё из пакета «Старт»</li>
           <li>12 месяцев полного обслуживания</li>
-          <li>Все обновления и доработки</li>
+          <li>Все обновления</li>
           <li>Проверка меток каждую неделю</li>
           <li>Замена повреждённых меток</li>
         </ul>
@@ -220,31 +394,12 @@ footer{text-align:center;padding:24px 16px 40px;color:var(--muted);font-size:.85
 
     </div>
 
-    <div style="margin-top:20px">
-      <div class="maint">
-        <div>
-          <strong>Ежемесячное обслуживание</strong><br>
-          <span style="font-size:.8rem;color:var(--muted)">После окончания пакета</span>
-        </div>
-        <div class="price">60 BYN/мес</div>
+    <div class="maint">
+      <div>
+        <strong>Ежемесячное обслуживание</strong><br>
+        <span style="font-size:.8rem;color:var(--muted)">После окончания пакета</span>
       </div>
-    </div>
-  </div>
-</section>
-
-<!-- WHAT'S IN MAINTENANCE -->
-<section>
-  <div class="wrap">
-    <h2>Что входит в обслуживание</h2>
-    <div class="features">
-      <ul>
-        <li>Работа Telegram-бота с заказами</li>
-        <li>Обновление меню и цен</li>
-        <li>Проверка всех NFC-меток 1 раз в неделю</li>
-        <li>Исправление технических ошибок</li>
-        <li>Консультации по использованию</li>
-        <li>Замена вышедших из строя меток</li>
-      </ul>
+      <div class="price">60 BYN/мес</div>
     </div>
   </div>
 </section>
@@ -252,13 +407,14 @@ footer{text-align:center;padding:24px 16px 40px;color:var(--muted);font-size:.85
 <!-- FINAL CTA -->
 <div class="wrap">
   <div class="cta">
-    <h2>Хотите попробовать?</h2>
-    <p>Поставим систему на 2–3 стола<br>бесплатно на 7–10 дней</p>
+    <h2>Попробуйте бесплатно</h2>
+    <p>Поставим систему на 2–3 стола<br>на 7–10 дней — без оплаты</p>
     <a href="https://t.me/Gde_Nikita" class="btn" target="_blank" rel="noopener">
       <svg viewBox="0 0 24 24"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.161c-.18 1.897-.962 6.502-1.359 8.627-.168.9-.5 1.201-.82 1.23-.697.064-1.226-.461-1.901-.903-1.056-.693-1.653-1.124-2.678-1.8-1.185-.781-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.139-5.062 3.345-.479.329-.913.489-1.302.481-.428-.009-1.252-.242-1.865-.44-.752-.244-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.831-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635.099-.002.321.023.465.141.121.099.155.232.171.326.016.093.036.305.02.47z"/></svg>
       Написать в Telegram
     </a>
     <span class="handle">@Gde_Nikita</span>
+    <div class="free">Бесплатный тест · без обязательств</div>
   </div>
 </div>
 
