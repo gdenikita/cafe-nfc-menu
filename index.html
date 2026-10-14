@@ -111,7 +111,6 @@ button:disabled{opacity:.5;cursor:not-allowed}
     <div class="payv">
       <button class="btn" id="payCash">Оплатить наличными</button>
       <button class="btn sec" id="payTerminal">Оплатить через терминал</button>
-      <button class="btn acc" id="payOnline" disabled>Оплатить онлайн <small>(в разработке)</small></button>
     </div>
     <div class="msg" id="payMsg"></div>
   </div>
@@ -357,7 +356,6 @@ document.addEventListener("click", async e=>{
 });
 $("shade").onclick = closeAll;
 $("openCart").onclick = ()=>{ if(TABLE && !$("cTable").value) $("cTable").value=TABLE; openSheet("cartSheet"); };
-$("payOnline").onclick = ()=>placeOrder("online");
 $("payCash").onclick = ()=>placeOrder("cash");
 $("newOrder").onclick = ()=>{ cart=[]; $("cartView").classList.remove("hidden"); $("okView").classList.add("hidden"); closeAll(); refresh(); };
 $("admBtn").onclick = ()=>{ openSheet("admSheet"); adminState(); };
