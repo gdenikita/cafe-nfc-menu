@@ -3,11 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Меню кафе</title>
+<title>Station One Cafe</title>
+<meta name="theme-color" content="#0e0e10">
 <style>
-:root{--bg:#f6f5f2;--card:#fff;--text:#1d1d1f;--muted:#6b6b70;--line:#e7e5e0;--pri:#1d1d1f;--onpri:#fff;--acc:#d9362b;--ok:#2a9d8f;--r:14px;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#121214;--card:#1c1c1f;--text:#f2f2f3;--muted:#9a9aa0;--line:#2c2c30;--pri:#f2f2f3;--onpri:#121214}}
-:root[data-theme="dark"]{--bg:#121214;--card:#1c1c1f;--text:#f2f2f3;--muted:#9a9aa0;--line:#2c2c30;--pri:#f2f2f3;--onpri:#121214}
+:root{color-scheme:dark;
+  /* ФИРМЕННЫЕ ЦВЕТА: меняются здесь */
+  --bg:#0e0e10;--card:#18181b;--text:#f3efe8;--muted:#9a948a;--line:#2b2b30;
+  --pri:#d9a441;--onpri:#141414;--acc:#d9a441;--ok:#4cb89a;--r:14px;
+  box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
 body{background:var(--bg);color:var(--text);font:16px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;padding-bottom:96px}
@@ -16,7 +19,13 @@ button{cursor:pointer;border:0;min-height:44px}
 header{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:var(--card);border-bottom:1px solid var(--line);padding:12px 16px}
 .wrap{max-width:720px;margin:0 auto}
 .top{display:flex;justify-content:space-between;align-items:center;gap:12px}
-h1{font-size:1.2rem}
+h1{font-size:1.1rem;letter-spacing:.16em;text-transform:uppercase;color:var(--pri)}
+.sub{font-size:.72rem;color:var(--muted);margin-top:2px;letter-spacing:.03em}
+header{border-bottom:1px solid var(--pri)!important}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0 4px}
+.tag{padding:4px 12px;border-radius:20px;border:1px solid var(--line);font-size:.8rem;color:var(--muted)}
+.btn.acc{background:var(--acc);color:var(--onpri)}
+.ph{color:var(--pri)}
 .cats{display:flex;gap:8px;overflow-x:auto;margin-top:10px;scrollbar-width:none;padding-bottom:2px}
 .cats::-webkit-scrollbar{display:none}
 .chip{white-space:nowrap;padding:0 16px;border-radius:22px;background:var(--bg);border:1px solid var(--line);color:var(--text)}
@@ -72,7 +81,7 @@ button:disabled{opacity:.5;cursor:not-allowed}
 </head>
 <body>
 <header><div class="wrap">
-  <div class="top"><h1 id="cafe"></h1><span class="msg" id="mode"></span><span class="chip on" id="tableBadge" style="display:none;min-height:30px;line-height:30px"></span></div>
+  <div class="top"><div><h1 id="cafe"></h1><div class="sub" id="sub"></div></div><span class="msg" id="mode"></span><span class="chip on" id="tableBadge" style="display:none;min-height:30px;line-height:30px"></span></div>
   <div class="cats" id="cats"></div>
 </div></header>
 <div class="qwrap">
@@ -137,7 +146,8 @@ button:disabled{opacity:.5;cursor:not-allowed}
       <label style="display:flex;align-items:center;gap:8px;font-size:.95rem;color:var(--text);margin-bottom:12px"><input type="checkbox" id="fStop" style="width:auto;margin:0"> Нет в наличии (стоп-лист)</label>
       <div class="pay"><button class="btn" id="fSave">Сохранить</button><button class="btn sec" id="fCancel">Отмена</button></div>
     </div>
-    <div class="pay" style="margin-top:14px">
+    <button class="btn" id="pubMenu" style="width:100%;margin-top:14px">Сохранить меню на сервере</button>
+    <div class="pay" style="margin-top:10px">
       <button class="btn sec sm" id="expJson">Копировать JSON меню</button>
       <button class="btn sec sm" id="impJson">Вставить JSON меню</button>
     </div>
@@ -149,23 +159,25 @@ button:disabled{opacity:.5;cursor:not-allowed}
 <script>
 /* ============ НАСТРОЙКИ ============ */
 const CONFIG = {
-  cafeName: "Кафе «Гомель»",
+  cafeName: "Station One Cafe",
   currency: "BYN",
   // Данные заведения. Пустые поля просто не показываются. Заполните и закоммитьте.
   place: {
-    address: "",          // например "г. Гомель, ул. Советская, 10"
-    phone: "",            // например "+375 29 000-00-00"
+    address: "Гомель, Советская улица, 29А (2 этаж)",          // например "г. Гомель, ул. Советская, 10"
+    phone: "+375 33 333-52-33",            // например "+375 29 000-00-00"
     hours: "",            // например "Ежедневно 10:00-23:00"
-    lat: null, lng: null, // координаты (правый клик по карте -> скопировать), например 52.4345 и 30.9754
+    lat: 52.434714, lng: 31.009511, // координаты (правый клик по карте -> скопировать), например 52.4345 и 30.9754
     wifiName: "", wifiPass: "",
-    yandexOrg: "",        // ссылка на организацию в Яндекс Картах (https://yandex.by/maps/org/.../ID/)
+    yandexOrg: "https://yandex.by/maps/org/station_one_cafe/112602723149/",        // ссылка на организацию в Яндекс Картах (https://yandex.by/maps/org/.../ID/)
     googleMaps: "",       // ссылка "Поделиться" из Google Карт
     googlePlaceId: "",    // Place ID для кнопки "Оставить отзыв" в Google
+    tags: ["Кальян", "Wi-Fi", "Летняя терраса", "Бизнес-ланч", "Детское меню", "Оплата картой", "Доставка", "С собой"],
+    social: { instagram: "https://www.instagram.com/station_one_gomel/", vk: "https://vk.ru/cafestationone", facebook: "https://facebook.com/cafestationone" },
     gisUrl: ""            // ссылка на организацию в 2ГИС (https://2gis.by/gomel/firm/ID)
   },
   apiUrl: "https://cafe-nfc-menu-api.gde-nikita.workers.dev",                     // адрес Worker, например "https://cafe-nfc-menu-api.ИМЯ.workers.dev"
   demoAdminPassword: "1234",      // работает ТОЛЬКО если apiUrl пустой (демо-режим). С сервером пароль проверяет сервер.
-  storageKey: "cafe_menu_v1"
+  storageKey: "cafe_menu_v2"
 };
 
 /* ===== Интеграция bePaid (заготовка) =====
@@ -205,12 +217,16 @@ const ORDERS = {
 
 /* ============ ДАННЫЕ ============ */
 const DEFAULT_MENU = [
-  {id:1,category:"Горячее",name:"Стейк из говядины",desc:"Мраморная говядина, овощи гриль",price:28.5,img:""},
-  {id:2,category:"Горячее",name:"Паста Карбонара",desc:"Спагетти, бекон, сливочный соус, пармезан",price:18,img:""},
-  {id:3,category:"Салаты",name:"Цезарь с курицей",desc:"Курица, айсберг, пармезан, соус цезарь",price:14.5,img:""},
-  {id:4,category:"Напитки",name:"Лимонад домашний",desc:"Мята, лайм, газированная вода",price:6,img:""},
-  {id:5,category:"Напитки",name:"Эспрессо",desc:"Классический",price:3.5,img:""},
-  {id:6,category:"Десерты",name:"Чизкейк",desc:"Классический Нью-Йорк",price:11,img:""}
+  {id:1,category:"Закуски",name:"Картофель фри",desc:"Хрустящий снаружи, мягкий внутри · 100 г",price:6,img:""},
+  {id:2,category:"Закуски",name:"Мутабаль",desc:"Печёные баклажаны, кунжутная паста, оливковое масло · 185 г",price:19,img:""},
+  {id:3,category:"Пицца",name:"Ветчина и грибы",desc:"Томатный соус, ветчина, грибы, моцарелла · 30 см, 460 г",price:19.5,img:""},
+  {id:4,category:"Пицца",name:"Ди маре",desc:"Креветки, мидии, каперсы, маслины, черри, моцарелла · 510 г",price:26,img:""},
+  {id:5,category:"Пицца",name:"Шаверма-пицца",desc:"Чесночный соус, курица, маринованные огурцы, томат, моцарелла · 490 г",price:19.5,img:""},
+  {id:6,category:"Шаверма и сэндвичи",name:"Фалафель сэндвич",desc:"Фалафель, маринованный огурец, томаты, лук, тахини · 350 г",price:9.5,img:""},
+  {id:7,category:"Шаверма и сэндвичи",name:"Шаверма говяжья",desc:"Говядина, огурцы, томаты, лук, тахини · 350 г",price:12.9,img:""},
+  {id:8,category:"Шаверма и сэндвичи",name:"Шаверма куриная",desc:"Куриная грудка, огурцы, чесночный соус, картофель фри · 350 г",price:11.5,img:""},
+  {id:9,category:"Горячее",name:"Барбекю из говядины",desc:"Говяжья вырезка, огурчик, лук, хумус · 340 г",price:39,img:""},
+  {id:10,category:"Горячее",name:"Филадельфия",desc:"Куриное филе, грибы, болгарский перец, сыр, картофель фри · 370 г",price:25,img:""}
 ];
 let state = {cafeName:CONFIG.cafeName, menu:DEFAULT_MENU};
 try{ const s = JSON.parse(localStorage.getItem(CONFIG.storageKey)||"null"); if(s && Array.isArray(s.menu)) state = s; }catch(e){}
@@ -250,6 +266,7 @@ function thumb(i){
 }
 function renderMenu(){
   $("cafe").textContent = state.cafeName;
+  $("sub").textContent = ((CONFIG.place.address||"").replace(/,?\s*\(.*\)/,"")).replace(/^г\.\s*/,"");
   document.title = state.cafeName;
   const term = ($("q")?$("q").value:"").trim().toLowerCase();
   let list = cat==="Все" ? state.menu : state.menu.filter(i=>i.category===cat);
@@ -355,6 +372,7 @@ $("admGo").onclick = async ()=>{
 };
 $("admOut").onclick = ()=>{ isAdmin=false; adminPass=""; adminState(); closeAll(); };
 $("admName").onchange = ()=>{ state.cafeName = $("admName").value.trim()||CONFIG.cafeName; commit(); };
+$("pubMenu").onclick = ()=>commit();
 $("addDish").onclick = ()=>openForm(null);
 $("fCancel").onclick = ()=>$("admForm").classList.add("hidden");
 $("fSave").onclick = ()=>{
@@ -380,7 +398,7 @@ function toast(msg){
   t.textContent = msg; t.style.display="block"; clearTimeout(toastTimer); toastTimer=setTimeout(()=>t.style.display="none",2600);
 }
 const P = CONFIG.place;
-const mapQuery = () => encodeURIComponent((state.cafeName+" "+(P.address||"Гомель")).trim());
+const mapQuery = () => encodeURIComponent((state.cafeName+" "+((P.address||"Гомель").replace(/\s*\(.*\)/,""))).trim());
 const hasXY = () => typeof P.lat==="number" && typeof P.lng==="number";
 const LINKS = {
   yandex:  () => P.yandexOrg || (hasXY() ? `https://yandex.by/maps/?pt=${P.lng},${P.lat}&z=17&l=map` : `https://yandex.by/maps/?text=${mapQuery()}`),
@@ -398,8 +416,11 @@ function renderInfo(){
   h += row("Адрес", esc(P.address)) + row("Часы работы", esc(P.hours));
   if(P.phone) h += row("Телефон", `<a href="tel:${esc(P.phone.replace(/[^+0-9]/g,""))}" style="color:var(--acc)">${esc(P.phone)}</a>`);
   if(P.wifiName) h += row("Wi-Fi", `${esc(P.wifiName)}${P.wifiPass?` <button class="btn sec sm" data-copy="${esc(P.wifiPass)}">Пароль</button>`:""}`);
+  if(P.tags && P.tags.length) h += `<div class="tags">${P.tags.map(t=>`<span class="tag">${esc(t)}</span>`).join("")}</div>`;
   h += `<div class="ih">Как добраться</div><div class="pay">${a(LINKS.yandex(),"Яндекс Карты")}${a(LINKS.google(),"Google Карты")}${a(LINKS.gis(),"2ГИС")}${a(LINKS.apple(),"Карты Apple")}</div>`;
   h += `<div class="ih">Оставить отзыв</div><div class="payv">${a(LINKS.yandexRv(),"Отзыв в Яндекс Картах")}${a(LINKS.googleRv(),"Отзыв в Google")}${a(LINKS.gisRv(),"Отзыв в 2ГИС")}</div>`;
+  const so = P.social || {}; const sl = [["instagram","Instagram"],["vk","ВКонтакте"],["facebook","Facebook"]].filter(x=>so[x[0]]);
+  if(sl.length) h += `<div class="ih">Мы в соцсетях</div><div class="pay">${sl.map(x=>a(so[x[0]],x[1])).join("")}</div>`;
   h += `<p class="msg" style="margin-top:14px">Спасибо, что выбрали нас! Ваш отзыв помогает нам становиться лучше.</p>`;
   $("infoBody").innerHTML = h;
 }
