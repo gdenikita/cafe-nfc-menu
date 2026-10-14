@@ -57,6 +57,17 @@ label{display:block;font-size:.8rem;color:var(--muted);margin-bottom:3px}
 .foot button{background:none;color:var(--muted);text-decoration:underline;min-height:36px}
 .adm{padding:10px 0;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:8px}
 .hidden{display:none!important}
+a.btn{display:flex;align-items:center;justify-content:center;text-decoration:none;min-height:44px;text-align:center}
+button:disabled{opacity:.5;cursor:not-allowed}
+.payv{display:grid;gap:10px}.payv .btn{min-height:50px}.payv small{font-weight:400;opacity:.85}
+.qwrap{max-width:720px;margin:0 auto;padding:12px 16px 0}
+.quick{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.quick .btn{padding:0 6px;font-size:.78rem;line-height:1.15;min-height:46px}
+.toast{position:fixed;left:50%;bottom:calc(90px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--pri);color:var(--onpri);padding:10px 16px;border-radius:12px;z-index:300;font-size:.9rem;max-width:90%;text-align:center}
+.irow{padding:8px 0;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:10px;align-items:center}
+.irow span:first-child{color:var(--muted);font-size:.85rem}
+.ih{font-weight:700;margin:16px 0 8px}
+.stop{opacity:.55}
 </style>
 </head>
 <body>
@@ -64,6 +75,14 @@ label{display:block;font-size:.8rem;color:var(--muted);margin-bottom:3px}
   <div class="top"><h1 id="cafe"></h1><span class="msg" id="mode"></span><span class="chip on" id="tableBadge" style="display:none;min-height:30px;line-height:30px"></span></div>
   <div class="cats" id="cats"></div>
 </div></header>
+<div class="qwrap">
+  <div class="quick">
+    <button class="btn sec" id="qCall">Позвать официанта</button>
+    <button class="btn sec" id="qBill">Попросить счёт</button>
+    <button class="btn sec" id="qInfo">Отзывы и адрес</button>
+  </div>
+  <input id="q" type="search" placeholder="Поиск по меню" style="margin:10px 0 0">
+</div>
 <main class="menu" id="menu"></main>
 <div class="foot"><button id="admBtn">Вход для администратора</button></div>
 
@@ -80,14 +99,21 @@ label{display:block;font-size:.8rem;color:var(--muted);margin-bottom:3px}
     <label>Имя</label><input id="cName" autocomplete="name">
     <label>Телефон</label><input id="cPhone" type="tel" autocomplete="tel" inputmode="tel">
     <label>Комментарий</label><textarea id="cNote" rows="2"></textarea>
-    <div class="pay">
-      <button class="btn acc" id="payOnline">Оплатить онлайн</button>
-      <button class="btn sec" id="payCash">Наличными</button>
+    <div class="payv">
+      <button class="btn" id="payCash">Оплатить наличными</button>
+      <button class="btn sec" id="payTerminal">Оплатить через терминал</button>
+      <button class="btn acc" id="payOnline" disabled>Оплатить онлайн <small>(в разработке)</small></button>
     </div>
     <div class="msg" id="payMsg"></div>
   </div>
   <div class="ok hidden" id="okView"><b>✓</b><h2>Заказ принят</h2><p id="okText"></p><p class="msg" id="okId"></p>
     <button class="btn" style="margin-top:14px" id="newOrder">Новый заказ</button></div>
+</section>
+
+<!-- Информация, карты, отзывы -->
+<section class="sheet" id="infoSheet">
+  <div class="sh"><h2>О нас</h2><button class="x" data-close>✕</button></div>
+  <div id="infoBody"></div>
 </section>
 
 <!-- Админка -->
@@ -108,6 +134,7 @@ label{display:block;font-size:.8rem;color:var(--muted);margin-bottom:3px}
       <label>Категория</label><input id="fCat">
       <label>Цена, BYN</label><input id="fPrice" type="number" step="0.01" inputmode="decimal">
       <label>Ссылка на фото (необязательно)</label><input id="fImg" inputmode="url">
+      <label style="display:flex;align-items:center;gap:8px;font-size:.95rem;color:var(--text);margin-bottom:12px"><input type="checkbox" id="fStop" style="width:auto;margin:0"> Нет в наличии (стоп-лист)</label>
       <div class="pay"><button class="btn" id="fSave">Сохранить</button><button class="btn sec" id="fCancel">Отмена</button></div>
     </div>
     <div class="pay" style="margin-top:14px">
@@ -124,6 +151,18 @@ label{display:block;font-size:.8rem;color:var(--muted);margin-bottom:3px}
 const CONFIG = {
   cafeName: "Кафе «Гомель»",
   currency: "BYN",
+  // Данные заведения. Пустые поля просто не показываются. Заполните и закоммитьте.
+  place: {
+    address: "",          // например "г. Гомель, ул. Советская, 10"
+    phone: "",            // например "+375 29 000-00-00"
+    hours: "",            // например "Ежедневно 10:00-23:00"
+    lat: null, lng: null, // координаты (правый клик по карте -> скопировать), например 52.4345 и 30.9754
+    wifiName: "", wifiPass: "",
+    yandexOrg: "",        // ссылка на организацию в Яндекс Картах (https://yandex.by/maps/org/.../ID/)
+    googleMaps: "",       // ссылка "Поделиться" из Google Карт
+    googlePlaceId: "",    // Place ID для кнопки "Оставить отзыв" в Google
+    gisUrl: ""            // ссылка на организацию в 2ГИС (https://2gis.by/gomel/firm/ID)
+  },
   apiUrl: "https://cafe-nfc-menu-api.gde-nikita.workers.dev",                     // адрес Worker, например "https://cafe-nfc-menu-api.ИМЯ.workers.dev"
   demoAdminPassword: "1234",      // работает ТОЛЬКО если apiUrl пустой (демо-режим). С сервером пароль проверяет сервер.
   storageKey: "cafe_menu_v1"
@@ -212,12 +251,14 @@ function thumb(i){
 function renderMenu(){
   $("cafe").textContent = state.cafeName;
   document.title = state.cafeName;
-  const list = cat==="Все" ? state.menu : state.menu.filter(i=>i.category===cat);
+  const term = ($("q")?$("q").value:"").trim().toLowerCase();
+  let list = cat==="Все" ? state.menu : state.menu.filter(i=>i.category===cat);
+  if(term) list = list.filter(i=>(i.name+" "+i.desc).toLowerCase().includes(term));
   $("menu").innerHTML = list.map(i=>{
     const q = (cart.find(c=>c.id===i.id)||{}).qty||0;
-    const ctl = q ? `<div class="qty"><button data-dec="${i.id}">−</button><b>${q}</b><button data-inc="${i.id}">+</button></div>`
+    const ctl = i.stop ? `<span class="msg">Нет в наличии</span>` : q ? `<div class="qty"><button data-dec="${i.id}">−</button><b>${q}</b><button data-inc="${i.id}">+</button></div>`
                   : `<button class="btn sm" data-inc="${i.id}">Добавить</button>`;
-    return `<article class="item">${thumb(i)}<div class="info"><div class="name">${esc(i.name)}</div><div class="desc">${esc(i.desc)}</div><div class="row"><span class="price">${money(i.price)}</span>${ctl}</div></div></article>`;
+    return `<article class="item${i.stop?" stop":""}">${thumb(i)}<div class="info"><div class="name">${esc(i.name)}</div><div class="desc">${esc(i.desc)}</div><div class="row"><span class="price">${money(i.price)}</span>${ctl}</div></div></article>`;
   }).join("") || '<p class="msg">Меню пока пустое.</p>';
 }
 
@@ -225,7 +266,7 @@ function renderMenu(){
 const total = () => cart.reduce((s,i)=>s+i.price*i.qty,0);
 const count = () => cart.reduce((s,i)=>s+i.qty,0);
 function change(id,d){
-  const it = state.menu.find(m=>m.id===id); if(!it) return;
+  const it = state.menu.find(m=>m.id===id); if(!it || (it.stop && d>0)) return;
   const ex = cart.find(c=>c.id===id);
   if(ex){ ex.qty += d; if(ex.qty<=0) cart = cart.filter(c=>c.id!==id); }
   else if(d>0) cart.push({...it,qty:1});
@@ -259,7 +300,8 @@ async function placeOrder(type){
     if(pay.reason!=="not_configured"){ $("payMsg").textContent="Не удалось создать платёж. Попробуйте ещё раз или выберите оплату наличными."; return; }
     order.status="pending_payment";
     text = "Онлайн-оплата скоро будет доступна. Заказ принят, оплатите "+money(order.total)+" на месте.";
-  } else text = "Оплатите "+money(order.total)+" наличными при получении.";
+  } else if(type==="terminal") text = "Оплатите "+money(order.total)+" картой через терминал. Официант принесёт его к столу.";
+  else text = "Оплатите "+money(order.total)+" наличными при получении.";
   const sent = await ORDERS.submit(order);
   if(!sent.ok){ $("payMsg").textContent="Не удалось отправить заказ. Проверьте соединение и попробуйте ещё раз."; return; }
   order.id = sent.id;
@@ -276,7 +318,7 @@ function admRender(){
 }
 function openForm(id){
   editId = id; const i = state.menu.find(m=>m.id===id)||{name:"",desc:"",category:"",price:"",img:""};
-  $("fName").value=i.name; $("fDesc").value=i.desc; $("fCat").value=i.category; $("fPrice").value=i.price; $("fImg").value=i.img||"";
+  $("fName").value=i.name; $("fDesc").value=i.desc; $("fCat").value=i.category; $("fPrice").value=i.price; $("fImg").value=i.img||""; $("fStop").checked=!!i.stop;
   $("admForm").classList.remove("hidden"); $("fName").focus();
 }
 function adminState(){ $("admLogin").classList.toggle("hidden",isAdmin); $("admMain").classList.toggle("hidden",!isAdmin); $("mode").textContent = isAdmin?"режим админа":""; if(isAdmin) admRender(); }
@@ -292,6 +334,7 @@ document.addEventListener("click", async e=>{
   else if(t.dataset.inc) change(+t.dataset.inc,1);
   else if(t.dataset.dec) change(+t.dataset.dec,-1);
   else if(t.dataset.close!==undefined) closeAll();
+  else if(t.dataset.copy){ try{ await navigator.clipboard.writeText(t.dataset.copy); toast("Скопировано"); }catch(e){ toast("Не удалось скопировать"); } }
   else if(t.dataset.edit) openForm(+t.dataset.edit);
   else if(t.dataset.del){ if(confirm("Удалить блюдо?")){ state.menu = state.menu.filter(m=>m.id!==+t.dataset.del); cart = cart.filter(c=>c.id!==+t.dataset.del); commit(); } }
 });
@@ -317,7 +360,7 @@ $("fCancel").onclick = ()=>$("admForm").classList.add("hidden");
 $("fSave").onclick = ()=>{
   const name=$("fName").value.trim(), price=parseFloat($("fPrice").value);
   if(!name || isNaN(price) || price<0){ $("admMsg").textContent="Укажите название и корректную цену"; return; }
-  const data={name,desc:$("fDesc").value.trim(),category:$("fCat").value.trim()||"Без категории",price,img:$("fImg").value.trim()};
+  const data={name,desc:$("fDesc").value.trim(),category:$("fCat").value.trim()||"Без категории",price,img:$("fImg").value.trim(),stop:$("fStop").checked};
   if(editId){ Object.assign(state.menu.find(m=>m.id===editId),data); cart.forEach(c=>{ if(c.id===editId) Object.assign(c,data); }); }
   else state.menu.push({id:Date.now(),...data});
   $("admMsg").textContent=""; $("admForm").classList.add("hidden"); commit();
@@ -328,6 +371,58 @@ $("impJson").onclick = ()=>{
   try{ const s=JSON.parse(raw); if(!Array.isArray(s.menu)) throw 0; state={cafeName:String(s.cafeName||CONFIG.cafeName),menu:s.menu}; cart=[]; commit(); $("admMsg").textContent="Меню загружено"; }
   catch(e){ $("admMsg").textContent="Неверный формат JSON"; }
 };
+
+/* ============ ДОПОЛНИТЕЛЬНО ============ */
+let toastTimer;
+function toast(msg){
+  let t = document.getElementById("toast");
+  if(!t){ t=document.createElement("div"); t.id="toast"; t.className="toast"; document.body.appendChild(t); }
+  t.textContent = msg; t.style.display="block"; clearTimeout(toastTimer); toastTimer=setTimeout(()=>t.style.display="none",2600);
+}
+const P = CONFIG.place;
+const mapQuery = () => encodeURIComponent((state.cafeName+" "+(P.address||"Гомель")).trim());
+const hasXY = () => typeof P.lat==="number" && typeof P.lng==="number";
+const LINKS = {
+  yandex:  () => P.yandexOrg || (hasXY() ? `https://yandex.by/maps/?pt=${P.lng},${P.lat}&z=17&l=map` : `https://yandex.by/maps/?text=${mapQuery()}`),
+  google:  () => P.googleMaps || `https://www.google.com/maps/search/?api=1&query=${mapQuery()}`,
+  gis:     () => P.gisUrl || `https://2gis.by/search/${mapQuery()}`,
+  apple:   () => hasXY() ? `https://maps.apple.com/?ll=${P.lat},${P.lng}&q=${encodeURIComponent(state.cafeName)}` : `https://maps.apple.com/?q=${mapQuery()}`,
+  yandexRv:() => P.yandexOrg ? P.yandexOrg.replace(/\/?$/,"/")+"reviews/" : LINKS.yandex(),
+  googleRv:() => P.googlePlaceId ? `https://search.google.com/local/writereview?placeid=${encodeURIComponent(P.googlePlaceId)}` : LINKS.google(),
+  gisRv:   () => P.gisUrl ? P.gisUrl.replace(/\/?$/,"")+"/tab/reviews" : LINKS.gis()
+};
+function renderInfo(){
+  const row = (k,v) => v ? `<div class="irow"><span>${k}</span><span>${v}</span></div>` : "";
+  const a = (href,txt) => `<a class="btn sec" href="${esc(href)}" target="_blank" rel="noopener">${txt}</a>`;
+  let h = `<h3 style="margin-bottom:6px">${esc(state.cafeName)}</h3>`;
+  h += row("Адрес", esc(P.address)) + row("Часы работы", esc(P.hours));
+  if(P.phone) h += row("Телефон", `<a href="tel:${esc(P.phone.replace(/[^+0-9]/g,""))}" style="color:var(--acc)">${esc(P.phone)}</a>`);
+  if(P.wifiName) h += row("Wi-Fi", `${esc(P.wifiName)}${P.wifiPass?` <button class="btn sec sm" data-copy="${esc(P.wifiPass)}">Пароль</button>`:""}`);
+  h += `<div class="ih">Как добраться</div><div class="pay">${a(LINKS.yandex(),"Яндекс Карты")}${a(LINKS.google(),"Google Карты")}${a(LINKS.gis(),"2ГИС")}${a(LINKS.apple(),"Карты Apple")}</div>`;
+  h += `<div class="ih">Оставить отзыв</div><div class="payv">${a(LINKS.yandexRv(),"Отзыв в Яндекс Картах")}${a(LINKS.googleRv(),"Отзыв в Google")}${a(LINKS.gisRv(),"Отзыв в 2ГИС")}</div>`;
+  h += `<p class="msg" style="margin-top:14px">Спасибо, что выбрали нас! Ваш отзыв помогает нам становиться лучше.</p>`;
+  $("infoBody").innerHTML = h;
+}
+$("qInfo").onclick = ()=>{ renderInfo(); openSheet("infoSheet"); };
+$("q").oninput = renderMenu;
+
+const lastCall = {};
+async function callStaff(kind){
+  let table = TABLE || $("cTable").value.trim();
+  if(!table) table = (prompt("Номер вашего стола?")||"").trim();
+  if(!/^[0-9A-Za-zА-Яа-я-]{1,10}$/.test(table)){ toast("Укажите номер стола"); return; }
+  if(Date.now()-(lastCall[kind]||0) < 60000){ toast("Запрос уже отправлен, подождите минуту"); return; }
+  if(!CONFIG.apiUrl){ toast("Демо-режим: запрос не отправлен"); return; }
+  try{
+    const r = await fetch(CONFIG.apiUrl+"/call",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({table,kind})});
+    if(r.ok){ lastCall[kind]=Date.now(); toast(kind==="bill"?"Официант скоро принесёт счёт":"Официант скоро подойдёт"); }
+    else if(r.status===429) toast("Запрос уже отправлен, подождите минуту");
+    else toast("Не удалось отправить, попробуйте ещё раз");
+  }catch(e){ toast("Нет связи с сервером"); }
+}
+$("qCall").onclick = ()=>callStaff("waiter");
+$("qBill").onclick = ()=>callStaff("bill");
+$("payTerminal").onclick = ()=>placeOrder("terminal");
 
 renderCats(); refresh(); loadRemoteMenu();
 </script>
