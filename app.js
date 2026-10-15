@@ -1,4 +1,3 @@
-
 const CONFIG = {
   cafeName: "Station One Cafe",
   currency: "BYN",
@@ -16,7 +15,7 @@ const CONFIG = {
     gisUrl: ""
   },
   apiUrl: "https://cafe-nfc-menu-api.gde-nikita.workers.dev",
-  demoAdminPassword: "1234",
+  demoAdminPassword: "060109",
   storageKey: "cafe_menu_v3"
 };
 
@@ -91,7 +90,7 @@ const money = n => n.toFixed(2)+" "+CONFIG.currency;
 function renderCats(){
   const cats = ["Все", ...new Set(state.menu.map(i=>i.category))];
   if(!cats.includes(cat)) cat = "Все";
-  $("cats").innerHTML = cats.map(c=>`<button class="chip ${c===cat?"on":""}" data-cat="${esc(c)}">${esc(c)}</button>`).join("");
+  $("cats").innerHTML = cats.map(c=>`<button type="button" class="chip ${c===cat?"on":""}" data-cat="${esc(c)}">${esc(c)}</button>`).join("");
 }
 function thumb(i){
   if(i.img) return `<img class="ph" src="${esc(i.img)}" alt="" loading="lazy">`;
@@ -106,9 +105,9 @@ function refresh(){
   let list = cat==="Все" ? state.menu : state.menu.filter(i=>i.category===cat);
   if(term) list = list.filter(i=>(i.name+" "+i.desc).toLowerCase().includes(term));
   $("menu").innerHTML = list.map(i=>{
-    const q = (cart.find(c=>c.id===i.id)||{}).qty||0;
-    const ctl = i.stop ? `<span class="msg">Нет в наличии</span>` : q ? `<div class="qty"><button data-dec="${i.id}">−</button><b>${q}</b><button data-inc="${i.id}">+</button></div>`
-                  : `<button class="btn sm" data-inc="${i.id}">Добавить</button>`;
+    const q = (cart.find(c=>c.id==i.id)||{}).qty||0;
+    const ctl = i.stop ? `<span class="msg">Нет в наличии</span>` : q ? `<div class="qty"><button type="button" data-dec="${i.id}" aria-label="Минус">−</button><b>${q}</b><button type="button" data-inc="${i.id}" aria-label="Плюс">+</button></div>`
+                  : `<button type="button" class="btn sm" data-inc="${i.id}">Добавить</button>`;
     return `<article class="item${i.stop?" stop":""}">${thumb(i)}<div class="info"><div class="name">${esc(i.name)}</div><div class="desc">${esc(i.desc)}</div><div class="row"><span class="price">${money(i.price)}</span>${ctl}</div></div></article>`;
   }).join("") || '<p class="msg">Меню пока пустое.</p>';
   const cnt = cart.reduce((s,i)=>s+i.qty,0), sum = cart.reduce((s,i)=>s+i.price*i.qty,0);
@@ -119,16 +118,23 @@ function refresh(){
 
 const total = () => cart.reduce((s,i)=>s+i.price*i.qty,0);
 function add(id, d){
-  const item = state.menu.find(m=>m.id===id); if(!item||item.stop) return;
-  const c = cart.find(x=>x.id===id);
-  if(c){ c.qty = Math.max(0, c.qty+d); if(!c.qty) cart = cart.filter(x=>x.id!==id); }
+  const item = state.menu.find(m=>m.id==id); if(!item||item.stop) return;
+  const c = cart.find(x=>x.id==id);
+  if(c){ c.qty = Math.max(0, c.qty+d); if(!c.qty) cart = cart.filter(x=>x.id!=id); }
   else if(d>0) cart.push({id:item.id,name:item.name,price:item.price,qty:1});
   refresh();
 }
 document.addEventListener("click", e=>{
-  const inc = e.target.closest("[data-inc]"); if(inc){ add(+inc.dataset.inc, 1); return; }
-  const dec = e.target.closest("[data-dec]"); if(dec){ add(+dec.dataset.dec, -1); return; }
-  const chip = e.target.closest("[data-cat]"); if(chip){ cat = chip.dataset.cat; renderCats(); refresh(); return; }
+  const qtyBtn = e.target.closest("[data-inc],[data-dec]");
+  if(qtyBtn){
+    e.preventDefault();
+    const id = Number(qtyBtn.getAttribute("data-inc") || qtyBtn.getAttribute("data-dec"));
+    if(!Number.isFinite(id)) return;
+    add(id, qtyBtn.hasAttribute("data-inc") ? 1 : -1);
+    return;
+  }
+  const chip = e.target.closest("[data-cat]");
+  if(chip){ cat = chip.getAttribute("data-cat"); renderCats(); refresh(); return; }
   if(e.target.closest("[data-close]")) closeSheets();
 });
 
@@ -138,7 +144,7 @@ $("shade").onclick = closeSheets;
 $("openCart").onclick = ()=>{ renderCart(); $("cartView").classList.remove("hidden"); $("okView").classList.add("hidden"); openSheet("cartSheet"); };
 function renderCart(){
   $("cartItems").innerHTML = cart.map(i=>`<div class="ci"><div><b>${esc(i.name)}</b><div class="msg">${money(i.price)}</div></div>
-    <div class="qty"><button data-dec="${i.id}">−</button><b>${i.qty}</b><button data-inc="${i.id}">+</button></div></div>`).join("") || '<p class="msg">Корзина пуста</p>';
+    <div class="qty"><button type="button" data-dec="${i.id}">−</button><b>${i.qty}</b><button type="button" data-inc="${i.id}">+</button></div></div>`).join("") || '<p class="msg">Корзина пуста</p>';
   $("cartTotal").textContent = "Итого: "+money(total());
   if(TABLE) $("cTable").value = TABLE;
 }
@@ -196,7 +202,7 @@ function renderInfo(){
   let h = `<h3 style="margin-bottom:6px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;font-size:.9rem">${esc(state.cafeName)}</h3>`;
   h += row("Адрес", esc(P.address));
   if(P.phone) h += row("Телефон", `<a href="tel:${esc(P.phone.replace(/[^\d+]/g,""))}" style="color:var(--text)">${esc(P.phone)}</a>`);
-  if(P.wifiName) h += row("Wi-Fi", `${esc(P.wifiName)}${P.wifiPass?` <button class="btn sec sm" data-copy="${esc(P.wifiPass)}">Пароль</button>`:""}`);
+  if(P.wifiName) h += row("Wi-Fi", `${esc(P.wifiName)}${P.wifiPass?` <button type="button" class="btn sec sm" data-copy="${esc(P.wifiPass)}">Пароль</button>`:""}`);
   if(P.tags && P.tags.length) h += `<div class="tags">${P.tags.map(t=>`<span class="tag">${esc(t)}</span>`).join("")}</div>`;
   h += `<div class="ih">Как добраться</div><div class="pay">${a(LINKS.yandex(),"Яндекс Карты")}${a(LINKS.google(),"Google Карты")}${a(LINKS.gis(),"2ГИС")}${a(LINKS.apple(),"Карты Apple")}</div>`;
   h += `<div class="ih">Оставить отзыв</div><div class="payv">${a(LINKS.yandexRv(),"Отзыв в Яндекс Картах")}${a(LINKS.googleRv(),"Отзыв в Google")}${a(LINKS.gisRv(),"Отзыв в 2ГИС")}</div>`;
@@ -210,20 +216,23 @@ $("q").oninput = refresh;
 
 $("admBtn").onclick = ()=>{ $("admLogin").classList.remove("hidden"); $("admMain").classList.add("hidden"); $("admErr").textContent=""; openSheet("admSheet"); };
 $("admGo").onclick = async ()=>{
-  const p = $("admPass").value;
+  const p = ($("admPass").value||"").trim();
+  if(!p){ $("admErr").textContent="Введите пароль"; return; }
+  let ok = false;
   if(CONFIG.apiUrl){
     try{
       const r = await fetch(CONFIG.apiUrl+"/auth",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({password:p})});
-      if(!r.ok){ $("admErr").textContent="Неверный пароль"; return; }
-      adminPass = p;
-    }catch(e){ $("admErr").textContent="Нет связи"; return; }
-  } else if(p !== CONFIG.demoAdminPassword){ $("admErr").textContent="Неверный пароль"; return; }
+      if(r.ok){ adminPass = p; ok = true; }
+    }catch(e){ /* offline */ }
+  }
+  if(!ok && p === CONFIG.demoAdminPassword){ adminPass = p; ok = true; }
+  if(!ok){ $("admErr").textContent="Неверный пароль"; return; }
   isAdmin = true; $("admLogin").classList.add("hidden"); $("admMain").classList.remove("hidden"); renderAdm();
 };
 function renderAdm(){
   $("admName").value = state.cafeName;
   $("admList").innerHTML = state.menu.map(i=>`<div class="adm"><div style="min-width:0"><b>${esc(i.name)}</b><div class="msg">${esc(i.category)} · ${money(i.price)}</div></div>
-    <div style="display:flex;gap:6px"><button class="btn sec sm" data-edit="${i.id}">Изм.</button><button class="btn sec sm" data-del="${i.id}">Удал.</button></div></div>`).join("");
+    <div style="display:flex;gap:6px"><button type="button" class="btn sec sm" data-edit="${i.id}">Изм.</button><button type="button" class="btn sec sm" data-del="${i.id}">Удал.</button></div></div>`).join("");
 }
 function openForm(id){
   editId = id; const i = state.menu.find(m=>m.id===id)||{name:"",desc:"",category:"",price:"",img:"",stop:false};
@@ -254,5 +263,41 @@ $("impJson").onclick = ()=>{ const raw=prompt("Вставьте JSON меню");
   try{ const s=JSON.parse(raw); if(!Array.isArray(s.menu)) throw 0; state={cafeName:String(s.cafeName||CONFIG.cafeName),menu:s.menu}; cart=[]; commit(); $("admMsg").textContent="Меню загружено"; }
   catch(e){ alert("Некорректный JSON"); }
 };
+
+/* Swipe categories like Telegram folders */
+(function setupSwipe(){
+  const zone = document.getElementById("menu") || document.body;
+  let x0 = null, y0 = null, locked = null;
+  const catsList = () => ["Все", ...new Set(state.menu.map(i=>i.category))];
+  function go(dir){
+    const list = catsList();
+    let i = list.indexOf(cat);
+    if(i < 0) i = 0;
+    i = (i + dir + list.length) % list.length;
+    cat = list[i];
+    renderCats();
+    refresh();
+    const on = document.querySelector(".chip.on");
+    if(on) on.scrollIntoView({inline:"center", block:"nearest", behavior:"smooth"});
+  }
+  zone.addEventListener("touchstart", e=>{
+    if(e.touches.length !== 1) return;
+    x0 = e.touches[0].clientX; y0 = e.touches[0].clientY; locked = null;
+  }, {passive:true});
+  zone.addEventListener("touchmove", e=>{
+    if(x0 == null) return;
+    const dx = e.touches[0].clientX - x0;
+    const dy = e.touches[0].clientY - y0;
+    if(locked === null && (Math.abs(dx) > 8 || Math.abs(dy) > 8))
+      locked = Math.abs(dx) > Math.abs(dy) ? "h" : "v";
+  }, {passive:true});
+  zone.addEventListener("touchend", e=>{
+    if(x0 == null) return;
+    const t = e.changedTouches[0];
+    const dx = t.clientX - x0;
+    if(locked === "h" && Math.abs(dx) > 50) go(dx < 0 ? 1 : -1);
+    x0 = y0 = locked = null;
+  }, {passive:true});
+})();
 
 renderCats(); refresh(); loadRemoteMenu();
