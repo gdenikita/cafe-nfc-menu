@@ -72,7 +72,7 @@ async function loadRemoteMenu(){
   if(!CONFIG.apiUrl) return;
   try{
     const r = await fetch(CONFIG.apiUrl+"/menu"); const d = await r.json();
-    if(d && Array.isArray(d.menu)){ state = {cafeName:CONFIG.cafeName, menu:d.menu}; cart=[]; renderCats(); refresh(); }
+    if(d && Array.isArray(d.menu)){ state = {cafeName:CONFIG.cafeName, menu:d.menu}; cart=[]; renderCats(); refresh(); measureHeader(); }
   }catch(e){ }
 }
 async function pushRemoteMenu(){
@@ -86,6 +86,25 @@ let cart = [], cat = "Все", isAdmin = false, editId = null;
 const $ = id => document.getElementById(id);
 const esc = s => String(s??"").replace(/[&<>"']/g, ch => { const m={"&":"amp","<":"lt",">":"gt",'"':"quot","'":"#39"}; return m[ch]?"&"+m[ch]+";":ch; });
 const money = n => n.toFixed(2)+" "+CONFIG.currency;
+
+function setCat(next){
+  if(next === cat) return;
+  cat = next;
+  const menu = $("menu");
+  if(menu){
+    menu.classList.add("fade");
+    menu.classList.remove("in");
+    setTimeout(()=>{
+      renderCats();
+      refresh();
+      menu.classList.add("in");
+      const on = document.querySelector(".chip.on");
+      if(on) on.scrollIntoView({inline:"center", block:"nearest", behavior:"smooth"});
+    }, 120);
+  } else {
+    renderCats(); refresh();
+  }
+}
 
 function renderCats(){
   const cats = ["Все", ...new Set(state.menu.map(i=>i.category))];
@@ -134,7 +153,7 @@ document.addEventListener("click", e=>{
     return;
   }
   const chip = e.target.closest("[data-cat]");
-  if(chip){ cat = chip.getAttribute("data-cat"); renderCats(); refresh(); return; }
+  if(chip){ setCat(chip.getAttribute("data-cat")); return; }
   if(e.target.closest("[data-close]")) closeSheets();
 });
 
@@ -223,7 +242,7 @@ $("admGo").onclick = async ()=>{
     try{
       const r = await fetch(CONFIG.apiUrl+"/auth",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({password:p})});
       if(r.ok){ adminPass = p; ok = true; }
-    }catch(e){ /* offline */ }
+    }catch(e){}
   }
   if(!ok && p === CONFIG.demoAdminPassword){ adminPass = p; ok = true; }
   if(!ok){ $("admErr").textContent="Неверный пароль"; return; }
@@ -264,7 +283,6 @@ $("impJson").onclick = ()=>{ const raw=prompt("Вставьте JSON меню");
   catch(e){ alert("Некорректный JSON"); }
 };
 
-/* Swipe categories like Telegram folders */
 (function setupSwipe(){
   const zone = document.getElementById("menu") || document.body;
   let x0 = null, y0 = null, locked = null;
@@ -274,11 +292,7 @@ $("impJson").onclick = ()=>{ const raw=prompt("Вставьте JSON меню");
     let i = list.indexOf(cat);
     if(i < 0) i = 0;
     i = (i + dir + list.length) % list.length;
-    cat = list[i];
-    renderCats();
-    refresh();
-    const on = document.querySelector(".chip.on");
-    if(on) on.scrollIntoView({inline:"center", block:"nearest", behavior:"smooth"});
+    setCat(list[i]);
   }
   zone.addEventListener("touchstart", e=>{
     if(e.touches.length !== 1) return;
@@ -300,4 +314,11 @@ $("impJson").onclick = ()=>{ const raw=prompt("Вставьте JSON меню");
   }, {passive:true});
 })();
 
-renderCats(); refresh(); loadRemoteMenu();
+function measureHeader(){
+  const bar = document.querySelector(".topbar");
+  const sp = document.getElementById("topSpacer");
+  if(bar && sp) sp.style.height = bar.offsetHeight + "px";
+}
+window.addEventListener("resize", measureHeader);
+
+renderCats(); refresh(); measureHeader(); loadRemoteMenu();
