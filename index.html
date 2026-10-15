@@ -11,17 +11,18 @@
 :root{color-scheme:light;--bg:#fff;--card:#fff;--text:#1a1a1a;--muted:#757575;--line:#e5e5e5;--pri:#1a1a1a;--onpri:#fff;--acc:#1a1a1a;--ok:#1a1a1a;--r:0;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
+html,body{overscroll-behavior-y:none;-webkit-overflow-scrolling:touch}
 body{background:var(--bg);color:var(--text);font:15px/1.5 Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-weight:400;padding-bottom:96px;letter-spacing:.01em}
 button,input,textarea{font:inherit;color:inherit}
-button{cursor:pointer;border:0;min-height:44px;background:none}
-header{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:var(--bg);border-bottom:1px solid var(--line);padding:18px 20px 0}
+button{cursor:pointer;border:0;min-height:44px;background:none;touch-action:manipulation}
+header{position:sticky;top:0;z-index:50;background:var(--bg);border-bottom:1px solid var(--line);padding:calc(12px + env(safe-area-inset-top,0px)) 20px 0;transform:translateZ(0);-webkit-backface-visibility:hidden;backface-visibility:hidden}
 .wrap{max-width:720px;margin:0 auto}
 .top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
 h1{font-size:1rem;font-weight:500;letter-spacing:.28em;text-transform:uppercase;color:var(--text)}
 .sub{font-size:.7rem;color:var(--muted);margin-top:6px;font-weight:300;letter-spacing:.04em}
-.cats{display:flex;gap:0;overflow-x:auto;margin-top:18px;scrollbar-width:none;padding-bottom:0;border-bottom:1px solid var(--line)}
+.cats{display:flex;gap:0;overflow-x:auto;margin-top:18px;scrollbar-width:none;padding-bottom:0;border-bottom:1px solid var(--line);-webkit-overflow-scrolling:touch}
 .cats::-webkit-scrollbar{display:none}
-.chip{white-space:nowrap;padding:12px 16px;border-radius:0;background:transparent;border:0;border-bottom:2px solid transparent;color:var(--muted);font-size:.75rem;font-weight:400;letter-spacing:.12em;text-transform:uppercase;margin-bottom:-1px}
+.chip{white-space:nowrap;padding:12px 16px;border-radius:0;background:transparent;border:0;border-bottom:2px solid transparent;color:var(--muted);font-size:.75rem;font-weight:400;letter-spacing:.12em;text-transform:uppercase;margin-bottom:-1px;flex:none}
 .chip.on{background:transparent;color:var(--text);border-bottom-color:var(--text);font-weight:500}
 .qwrap{max-width:720px;margin:0 auto;padding:16px 20px 0}
 .quick{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
@@ -43,8 +44,8 @@ h1{font-size:1rem;font-weight:500;letter-spacing:.28em;text-transform:uppercase;
 .btn.sec{background:transparent;color:var(--text);border:1px solid var(--text)}
 .btn.acc{background:var(--acc);color:#fff}
 .btn.sm{min-height:36px;padding:0 14px;font-size:.7rem}
-.qty{display:flex;align-items:center;gap:12px}
-.qty button{width:32px;min-height:32px;border-radius:0;background:transparent;border:1px solid var(--line);font-size:.9rem;color:var(--text)}
+.qty{display:flex;align-items:center;gap:12px;user-select:none;-webkit-user-select:none}
+.qty button{width:40px;min-height:40px;border-radius:0;background:transparent;border:1px solid var(--line);font-size:1.1rem;color:var(--text);touch-action:manipulation;-webkit-tap-highlight-color:transparent}
 .qty b{font-weight:400;min-width:16px;text-align:center}
 .bar{position:fixed;left:0;right:0;bottom:0;z-index:60;max-width:100%;margin:0 auto;padding:0;padding-bottom:env(safe-area-inset-bottom,0px);background:var(--text)}
 .bar .btn{width:100%;min-height:56px;display:flex;justify-content:space-between;align-items:center;box-shadow:none;border-radius:0;padding:0 24px;background:var(--text);color:var(--onpri);font-size:.75rem;letter-spacing:.16em}
@@ -92,18 +93,18 @@ button:disabled{opacity:.4;cursor:not-allowed}
 </div></header>
 <div class="qwrap">
   <div class="quick">
-    <button class="btn sec" id="qCall">Позвать официанта</button>
-    <button class="btn sec" id="qBill">Попросить счёт</button>
-    <button class="btn sec" id="qInfo">Отзывы и адрес</button>
+    <button type="button" class="btn sec" id="qCall">Позвать официанта</button>
+    <button type="button" class="btn sec" id="qBill">Попросить счёт</button>
+    <button type="button" class="btn sec" id="qInfo">Отзывы и адрес</button>
   </div>
   <input id="q" type="search" placeholder="Поиск по меню">
 </div>
 <main class="menu" id="menu"></main>
-<div class="foot"><button id="admBtn">Вход для администратора</button></div>
-<div class="bar hide" id="bar"><button class="btn" id="openCart"><span id="barCnt"></span><span id="barSum"></span></button></div>
+<div class="foot"><button type="button" id="admBtn">Вход для администратора</button></div>
+<div class="bar hide" id="bar"><button type="button" class="btn" id="openCart"><span id="barCnt"></span><span id="barSum"></span></button></div>
 <div class="shade" id="shade"></div>
 <section class="sheet" id="cartSheet">
-  <div class="sh"><h2>Ваш заказ</h2><button class="x" data-close>✕</button></div>
+  <div class="sh"><h2>Ваш заказ</h2><button type="button" class="x" data-close>✕</button></div>
   <div id="cartView">
     <div id="cartItems"></div>
     <div class="total" id="cartTotal"></div>
@@ -112,45 +113,45 @@ button:disabled{opacity:.4;cursor:not-allowed}
     <label>Телефон</label><input id="cPhone" type="tel" autocomplete="tel" inputmode="tel">
     <label>Комментарий</label><textarea id="cNote" rows="2"></textarea>
     <div class="payv">
-      <button class="btn" id="payCash">Оплатить наличными</button>
-      <button class="btn sec" id="payTerminal">Оплатить через терминал</button>
+      <button type="button" class="btn" id="payCash">Оплатить наличными</button>
+      <button type="button" class="btn sec" id="payTerminal">Оплатить через терминал</button>
     </div>
     <div class="msg" id="payMsg"></div>
   </div>
   <div class="ok hidden" id="okView"><b>✓</b><h2>Заказ принят</h2><p id="okText"></p><p class="msg" id="okId"></p>
-    <button class="btn" style="margin-top:14px" id="newOrder">Новый заказ</button></div>
+    <button type="button" class="btn" style="margin-top:14px" id="newOrder">Новый заказ</button></div>
 </section>
 <section class="sheet" id="infoSheet">
-  <div class="sh"><h2>О нас</h2><button class="x" data-close>✕</button></div>
+  <div class="sh"><h2>О нас</h2><button type="button" class="x" data-close>✕</button></div>
   <div id="infoBody"></div>
 </section>
 <section class="sheet" id="admSheet">
-  <div class="sh"><h2>Администратор</h2><button class="x" data-close>✕</button></div>
+  <div class="sh"><h2>Администратор</h2><button type="button" class="x" data-close>✕</button></div>
   <div id="admLogin">
     <label>Пароль</label><input id="admPass" type="password" autocomplete="off">
-    <button class="btn" id="admGo" style="width:100%">Войти</button>
+    <button type="button" class="btn" id="admGo" style="width:100%">Войти</button>
     <div class="msg" id="admErr"></div>
   </div>
   <div id="admMain" class="hidden">
     <label>Название заведения</label><input id="admName">
-    <div class="sh"><b>Блюда</b><button class="btn sm" id="addDish">+ Добавить</button></div>
+    <div class="sh"><b>Блюда</b><button type="button" class="btn sm" id="addDish">+ Добавить</button></div>
     <div id="admList"></div>
     <div id="admForm" class="hidden" style="margin-top:12px">
       <label>Название</label><input id="fName">
       <label>Описание</label><input id="fDesc">
       <label>Категория</label><input id="fCat">
       <label>Цена, BYN</label><input id="fPrice" type="number" step="0.01" inputmode="decimal">
-      <label>Ссылка на фото (необязательно)</label><input id="fImg" inputmode="url">
+      <label>Ссылка на фото</label><input id="fImg" inputmode="url">
       <label style="display:flex;align-items:center;gap:8px;font-size:.95rem;color:var(--text);margin-bottom:12px;text-transform:none;letter-spacing:0"><input type="checkbox" id="fStop" style="width:auto;margin:0"> Нет в наличии</label>
-      <div class="pay"><button class="btn" id="fSave">Сохранить</button><button class="btn sec" id="fCancel">Отмена</button></div>
+      <div class="pay"><button type="button" class="btn" id="fSave">Сохранить</button><button type="button" class="btn sec" id="fCancel">Отмена</button></div>
     </div>
-    <button class="btn" id="pubMenu" style="width:100%;margin-top:14px">Сохранить меню на сервере</button>
+    <button type="button" class="btn" id="pubMenu" style="width:100%;margin-top:14px">Сохранить меню на сервере</button>
     <div class="pay" style="margin-top:10px">
-      <button class="btn sec sm" id="expJson">Копировать JSON</button>
-      <button class="btn sec sm" id="impJson">Вставить JSON</button>
+      <button type="button" class="btn sec sm" id="expJson">Копировать JSON</button>
+      <button type="button" class="btn sec sm" id="impJson">Вставить JSON</button>
     </div>
     <div class="msg" id="admMsg"></div>
-    <button class="btn sec sm" id="admOut" style="margin-top:8px">Выйти</button>
+    <button type="button" class="btn sec sm" id="admOut" style="margin-top:8px">Выйти</button>
   </div>
 </section>
 <script src="app.js"></script>
