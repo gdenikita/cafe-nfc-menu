@@ -1,1 +1,159 @@
-BACKUP_PLACEHOLDER
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Station One Cafe</title>
+<meta name="theme-color" content="#0e0e10">
+<style>
+:root{color-scheme:dark;
+  --bg:#0e0e10;--card:#18181b;--text:#f3efe8;--muted:#9a948a;--line:#2b2b30;
+  --pri:#d9a441;--onpri:#141414;--acc:#d9a441;--ok:#4cb89a;--r:14px;
+  box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{background:var(--bg);color:var(--text);font:16px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;padding-bottom:96px}
+button,input,textarea{font:inherit;color:inherit}
+button{cursor:pointer;border:0;min-height:44px}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:var(--card);border-bottom:1px solid var(--line);padding:12px 16px}
+.wrap{max-width:720px;margin:0 auto}
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px}
+h1{font-size:1.1rem;letter-spacing:.16em;text-transform:uppercase;color:var(--pri)}
+.sub{font-size:.72rem;color:var(--muted);margin-top:2px;letter-spacing:.03em}
+header{border-bottom:1px solid var(--pri)!important}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0 4px}
+.tag{padding:4px 12px;border-radius:20px;border:1px solid var(--line);font-size:.8rem;color:var(--muted)}
+.btn.acc{background:var(--acc);color:var(--onpri)}
+.ph{color:var(--pri)}
+.cats{display:flex;gap:8px;overflow-x:auto;margin-top:10px;scrollbar-width:none;padding-bottom:2px}
+.cats::-webkit-scrollbar{display:none}
+.chip{white-space:nowrap;padding:0 16px;border-radius:22px;background:var(--bg);border:1px solid var(--line);color:var(--text)}
+.chip.on{background:var(--pri);color:var(--onpri);border-color:var(--pri)}
+.menu{padding:14px 16px;display:grid;gap:12px;max-width:720px;margin:0 auto}
+@media(min-width:640px){.menu{grid-template-columns:1fr 1fr}}
+.item{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:12px;display:flex;gap:12px}
+.ph{width:88px;height:88px;border-radius:10px;background:var(--bg);flex:none;object-fit:cover;display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:700;color:var(--muted)}
+.info{flex:1;min-width:0;display:flex;flex-direction:column}
+.name{font-weight:600}
+.desc{font-size:.85rem;color:var(--muted);margin:2px 0 6px}
+.row{margin-top:auto;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.price{font-weight:700;color:var(--acc)}
+.btn{background:var(--pri);color:var(--onpri);border-radius:10px;padding:0 16px;font-weight:600}
+.btn.sec{background:var(--bg);color:var(--text);border:1px solid var(--line)}
+.btn.acc{background:var(--acc);color:#fff}
+.btn.sm{min-height:36px;padding:0 12px;font-size:.85rem}
+.qty{display:flex;align-items:center;gap:10px}
+.qty button{width:36px;min-height:36px;border-radius:50%;background:var(--bg);border:1px solid var(--line)}
+.bar{position:fixed;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom,0px));z-index:60;max-width:696px;margin:0 auto}
+.bar .btn{width:100%;min-height:52px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 6px 20px rgba(0,0,0,.25);border-radius:16px}
+.bar.hide{display:none}
+.shade{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:100;display:none}
+.shade.on{display:block}
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:110;background:var(--card);border-radius:20px 20px 0 0;max-height:90%;overflow-y:auto;padding:16px 16px calc(16px + env(safe-area-inset-bottom,0px));transform:translateY(105%);transition:transform .25s;max-width:720px;margin:0 auto}
+.sheet.on{transform:none}
+.sh{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.x{background:none;font-size:1.4rem;width:44px}
+.ci{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px 0;border-bottom:1px solid var(--line)}
+.total{text-align:right;font-weight:700;font-size:1.15rem;margin:12px 0}
+input,textarea,select{width:100%;padding:12px;margin-bottom:10px;background:var(--bg);border:1px solid var(--line);border-radius:10px;font-size:16px}
+label{display:block;font-size:.8rem;color:var(--muted);margin-bottom:3px}
+.pay{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.msg{font-size:.85rem;color:var(--muted);margin:8px 0}
+.ok{text-align:center;padding:24px 0}
+.ok b{display:block;font-size:2.4rem;color:var(--ok)}
+.foot{text-align:center;padding:20px;font-size:.8rem}
+.foot button{background:none;color:var(--muted);text-decoration:underline;min-height:36px}
+.adm{padding:10px 0;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:8px}
+.hidden{display:none!important}
+a.btn{display:flex;align-items:center;justify-content:center;text-decoration:none;min-height:44px;text-align:center}
+button:disabled{opacity:.5;cursor:not-allowed}
+.payv{display:grid;gap:10px}.payv .btn{min-height:50px}.payv small{font-weight:400;opacity:.85}
+.qwrap{max-width:720px;margin:0 auto;padding:12px 16px 0}
+.quick{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.quick .btn{padding:0 6px;font-size:.78rem;line-height:1.15;min-height:46px}
+.toast{position:fixed;left:50%;bottom:calc(90px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--pri);color:var(--onpri);padding:10px 16px;border-radius:12px;z-index:300;font-size:.9rem;max-width:90%;text-align:center}
+.irow{padding:8px 0;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:10px;align-items:center}
+.irow span:first-child{color:var(--muted);font-size:.85rem}
+.ih{font-weight:700;margin:16px 0 8px}
+.stop{opacity:.55}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <div class="top"><div><h1 id="cafe"></h1><div class="sub" id="sub"></div></div><span class="msg" id="mode"></span><span class="chip on" id="tableBadge" style="display:none;min-height:30px;line-height:30px"></span></div>
+  <div class="cats" id="cats"></div>
+</div></header>
+<div class="qwrap">
+  <div class="quick">
+    <button class="btn sec" id="qCall">Позвать официанта</button>
+    <button class="btn sec" id="qBill">Попросить счёт</button>
+    <button class="btn sec" id="qInfo">Отзывы и адрес</button>
+  </div>
+  <input id="q" type="search" placeholder="Поиск по меню" style="margin:10px 0 0">
+</div>
+<main class="menu" id="menu"></main>
+<div class="foot"><button id="admBtn">Вход для администратора</button></div>
+
+<div class="bar hide" id="bar"><button class="btn" id="openCart"><span id="barCnt"></span><span id="barSum"></span></button></div>
+<div class="shade" id="shade"></div>
+
+<section class="sheet" id="cartSheet">
+  <div class="sh"><h2>Ваш заказ</h2><button class="x" data-close>✕</button></div>
+  <div id="cartView">
+    <div id="cartItems"></div>
+    <div class="total" id="cartTotal"></div>
+    <label>Номер стола</label><input id="cTable" inputmode="numeric" maxlength="10" placeholder="Например, 5">
+    <label>Имя</label><input id="cName" autocomplete="name">
+    <label>Телефон</label><input id="cPhone" type="tel" autocomplete="tel" inputmode="tel">
+    <label>Комментарий</label><textarea id="cNote" rows="2"></textarea>
+    <div class="payv">
+      <button class="btn" id="payCash">Оплатить наличными</button>
+      <button class="btn sec" id="payTerminal">Оплатить через терминал</button>
+    </div>
+    <div class="msg" id="payMsg"></div>
+  </div>
+  <div class="ok hidden" id="okView"><b>✓</b><h2>Заказ принят</h2><p id="okText"></p><p class="msg" id="okId"></p>
+    <button class="btn" style="margin-top:14px" id="newOrder">Новый заказ</button></div>
+</section>
+
+<section class="sheet" id="infoSheet">
+  <div class="sh"><h2>О нас</h2><button class="x" data-close>✕</button></div>
+  <div id="infoBody"></div>
+</section>
+
+<section class="sheet" id="admSheet">
+  <div class="sh"><h2>Администратор</h2><button class="x" data-close>✕</button></div>
+  <div id="admLogin">
+    <label>Пароль</label><input id="admPass" type="password" autocomplete="off">
+    <button class="btn" id="admGo" style="width:100%">Войти</button>
+    <div class="msg" id="admErr"></div>
+  </div>
+  <div id="admMain" class="hidden">
+    <label>Название заведения</label><input id="admName">
+    <div class="sh"><b>Блюда</b><button class="btn sm" id="addDish">+ Добавить</button></div>
+    <div id="admList"></div>
+    <div id="admForm" class="hidden" style="margin-top:12px">
+      <label>Название</label><input id="fName">
+      <label>Описание</label><input id="fDesc">
+      <label>Категория</label><input id="fCat">
+      <label>Цена, BYN</label><input id="fPrice" type="number" step="0.01" inputmode="decimal">
+      <label>Ссылка на фото (необязательно)</label><input id="fImg" inputmode="url">
+      <label style="display:flex;align-items:center;gap:8px;font-size:.95rem;color:var(--text);margin-bottom:12px"><input type="checkbox" id="fStop" style="width:auto;margin:0"> Нет в наличии (стоп-лист)</label>
+      <div class="pay"><button class="btn" id="fSave">Сохранить</button><button class="btn sec" id="fCancel">Отмена</button></div>
+    </div>
+    <button class="btn" id="pubMenu" style="width:100%;margin-top:14px">Сохранить меню на сервере</button>
+    <div class="pay" style="margin-top:10px">
+      <button class="btn sec sm" id="expJson">Копировать JSON меню</button>
+      <button class="btn sec sm" id="impJson">Вставить JSON меню</button>
+    </div>
+    <div class="msg" id="admMsg"></div>
+    <button class="btn sec sm" id="admOut" style="margin-top:8px">Выйти</button>
+  </div>
+</section>
+
+<p style="text-align:center;padding:20px;color:#9a948a;font-size:.75rem">Это резервная копия классической тёмной темы.<br>Чтобы вернуть её: скопируйте содержимое этого файла в index.html</p>
+<script>
+document.body.innerHTML='<div style="padding:40px 20px;text-align:center;font-family:system-ui"><h1 style="letter-spacing:.15em">CLASSIC BACKUP</h1><p style="color:#888;margin:16px 0">Резервная копия тёмной темы (золото + тёмный фон).</p><p>Чтобы вернуть: скачайте этот файл с GitHub и замените им index.html, либо напишите мне «верни классику».</p><p style="margin-top:24px"><a href="./" style="color:#d9a441">← К текущему меню</a></p></div>';
+</script>
+</body>
+</html>
