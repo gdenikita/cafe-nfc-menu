@@ -1,1 +1,656 @@
-ZARA_PLACEHOLDER
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Station One Cafe</title>
+<meta name="theme-color" content="#ffffff">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  color-scheme:light;
+  --bg:#ffffff;
+  --card:#ffffff;
+  --text:#1a1a1a;
+  --muted:#757575;
+  --line:#e5e5e5;
+  --pri:#1a1a1a;
+  --onpri:#ffffff;
+  --acc:#1a1a1a;
+  --ok:#1a1a1a;
+  --r:0;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font:15px/1.5 Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-weight:400;
+  padding-bottom:96px;
+  letter-spacing:.01em;
+}
+button,input,textarea{font:inherit;color:inherit}
+button{cursor:pointer;border:0;min-height:44px;background:none}
+header{
+  position:sticky;top:env(safe-area-inset-top,0px);z-index:50;
+  background:var(--bg);
+  border-bottom:1px solid var(--line);
+  padding:18px 20px 0;
+}
+.wrap{max-width:720px;margin:0 auto}
+.top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+h1{
+  font-size:1rem;
+  font-weight:500;
+  letter-spacing:.28em;
+  text-transform:uppercase;
+  color:var(--text);
+}
+.sub{
+  font-size:.7rem;
+  color:var(--muted);
+  margin-top:6px;
+  font-weight:300;
+  letter-spacing:.04em;
+}
+.cats{
+  display:flex;gap:0;overflow-x:auto;margin-top:18px;
+  scrollbar-width:none;padding-bottom:0;
+  border-bottom:1px solid var(--line);
+}
+.cats::-webkit-scrollbar{display:none}
+.chip{
+  white-space:nowrap;
+  padding:12px 16px;
+  border-radius:0;
+  background:transparent;
+  border:0;
+  border-bottom:2px solid transparent;
+  color:var(--muted);
+  font-size:.75rem;
+  font-weight:400;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  margin-bottom:-1px;
+}
+.chip.on{
+  background:transparent;
+  color:var(--text);
+  border-bottom-color:var(--text);
+  font-weight:500;
+}
+.qwrap{max-width:720px;margin:0 auto;padding:16px 20px 0}
+.quick{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.quick .btn{
+  padding:12px 6px;
+  font-size:.68rem;
+  line-height:1.2;
+  min-height:44px;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  font-weight:400;
+}
+#q{
+  margin:14px 0 0;
+  border:0;
+  border-bottom:1px solid var(--line);
+  border-radius:0;
+  padding:12px 0;
+  background:transparent;
+  font-size:.9rem;
+  font-weight:300;
+}
+#q::placeholder{color:var(--muted);letter-spacing:.04em}
+.menu{
+  padding:8px 20px 24px;
+  display:grid;
+  gap:0;
+  max-width:720px;
+  margin:0 auto;
+}
+@media(min-width:640px){.menu{grid-template-columns:1fr 1fr;gap:0 32px}}
+.item{
+  background:transparent;
+  border:0;
+  border-bottom:1px solid var(--line);
+  border-radius:0;
+  padding:20px 0;
+  display:flex;
+  gap:16px;
+  transition:opacity .2s;
+}
+.item:hover{opacity:.75}
+.ph{
+  width:72px;height:72px;
+  border-radius:0;
+  background:#f5f5f5;
+  flex:none;
+  object-fit:cover;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.1rem;
+  font-weight:300;
+  color:var(--muted);
+  letter-spacing:.05em;
+}
+.info{flex:1;min-width:0;display:flex;flex-direction:column}
+.name{
+  font-weight:400;
+  font-size:.9rem;
+  letter-spacing:.04em;
+  text-transform:uppercase;
+}
+.desc{
+  font-size:.78rem;
+  color:var(--muted);
+  margin:4px 0 10px;
+  font-weight:300;
+  line-height:1.4;
+}
+.row{margin-top:auto;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.price{
+  font-weight:400;
+  color:var(--text);
+  font-size:.85rem;
+  letter-spacing:.03em;
+}
+.btn{
+  background:var(--pri);
+  color:var(--onpri);
+  border-radius:0;
+  padding:0 20px;
+  font-weight:400;
+  font-size:.75rem;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  transition:opacity .2s;
+}
+.btn:hover{opacity:.85}
+.btn.sec{
+  background:transparent;
+  color:var(--text);
+  border:1px solid var(--text);
+}
+.btn.acc{background:var(--acc);color:#fff}
+.btn.sm{min-height:36px;padding:0 14px;font-size:.7rem}
+.qty{display:flex;align-items:center;gap:12px}
+.qty button{
+  width:32px;min-height:32px;
+  border-radius:0;
+  background:transparent;
+  border:1px solid var(--line);
+  font-size:.9rem;
+  color:var(--text);
+}
+.qty b{font-weight:400;min-width:16px;text-align:center}
+.bar{
+  position:fixed;left:0;right:0;
+  bottom:0;
+  z-index:60;
+  max-width:100%;
+  margin:0 auto;
+  padding:0;
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  background:var(--text);
+}
+.bar .btn{
+  width:100%;
+  min-height:56px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  box-shadow:none;
+  border-radius:0;
+  padding:0 24px;
+  background:var(--text);
+  color:var(--onpri);
+  font-size:.75rem;
+  letter-spacing:.16em;
+}
+.bar.hide{display:none}
+.shade{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:100;display:none}
+.shade.on{display:block}
+.sheet{
+  position:fixed;left:0;right:0;bottom:0;z-index:110;
+  background:var(--bg);
+  border-radius:0;
+  max-height:92%;
+  overflow-y:auto;
+  padding:24px 20px calc(24px + env(safe-area-inset-bottom,0px));
+  transform:translateY(105%);
+  transition:transform .3s cubic-bezier(.2,.8,.2,1);
+  max-width:720px;
+  margin:0 auto;
+  border-top:1px solid var(--line);
+}
+.sheet.on{transform:none}
+.sh{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
+.sh h2{
+  font-size:.85rem;
+  font-weight:500;
+  letter-spacing:.2em;
+  text-transform:uppercase;
+}
+.x{background:none;font-size:1.2rem;width:44px;color:var(--muted);font-weight:300}
+.ci{
+  display:flex;justify-content:space-between;align-items:center;gap:8px;
+  padding:16px 0;
+  border-bottom:1px solid var(--line);
+}
+.ci b{font-weight:400;font-size:.85rem;letter-spacing:.03em}
+.total{
+  text-align:right;
+  font-weight:400;
+  font-size:1rem;
+  margin:20px 0;
+  letter-spacing:.06em;
+}
+input,textarea,select{
+  width:100%;
+  padding:14px 0;
+  margin-bottom:4px;
+  background:transparent;
+  border:0;
+  border-bottom:1px solid var(--line);
+  border-radius:0;
+  font-size:16px;
+  font-weight:300;
+}
+input:focus,textarea:focus{outline:0;border-bottom-color:var(--text)}
+label{
+  display:block;
+  font-size:.65rem;
+  color:var(--muted);
+  margin:14px 0 0;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  font-weight:400;
+}
+.pay{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.msg{font-size:.8rem;color:var(--muted);margin:8px 0;font-weight:300}
+.ok{text-align:center;padding:40px 0}
+.ok b{display:block;font-size:2rem;color:var(--text);font-weight:300;margin-bottom:12px}
+.ok h2{font-size:.9rem;letter-spacing:.16em;text-transform:uppercase;font-weight:500}
+.foot{text-align:center;padding:32px 20px;font-size:.7rem}
+.foot button{background:none;color:var(--muted);text-decoration:none;min-height:36px;letter-spacing:.1em;text-transform:uppercase;font-size:.65rem}
+.adm{padding:14px 0;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:8px}
+.hidden{display:none!important}
+a.btn{display:flex;align-items:center;justify-content:center;text-decoration:none;min-height:44px;text-align:center}
+button:disabled{opacity:.4;cursor:not-allowed}
+.payv{display:grid;gap:10px;margin-top:16px}
+.payv .btn{min-height:52px}
+.payv small{font-weight:300;opacity:.7;letter-spacing:0;text-transform:none;font-size:.7rem}
+.toast{
+  position:fixed;left:50%;bottom:calc(80px + env(safe-area-inset-bottom,0px));
+  transform:translateX(-50%);
+  background:var(--text);color:var(--onpri);
+  padding:12px 20px;border-radius:0;z-index:300;
+  font-size:.75rem;max-width:90%;text-align:center;
+  letter-spacing:.08em;text-transform:uppercase;
+}
+.irow{padding:12px 0;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:10px;align-items:center}
+.irow span:first-child{color:var(--muted);font-size:.75rem;letter-spacing:.06em;text-transform:uppercase}
+.ih{font-weight:500;margin:24px 0 12px;font-size:.75rem;letter-spacing:.16em;text-transform:uppercase}
+.stop{opacity:.4}
+.tags{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 4px}
+.tag{
+  padding:6px 12px;
+  border-radius:0;
+  border:1px solid var(--line);
+  font-size:.65rem;
+  color:var(--muted);
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  font-weight:300;
+}
+#tableBadge{
+  border:1px solid var(--text)!important;
+  background:transparent!important;
+  color:var(--text)!important;
+  border-radius:0!important;
+  font-size:.65rem!important;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  font-weight:400;
+  padding:0 10px!important;
+}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <div class="top"><div><h1 id="cafe"></h1><div class="sub" id="sub"></div></div><span class="msg" id="mode"></span><span class="chip on" id="tableBadge" style="display:none;min-height:30px;line-height:30px"></span></div>
+  <div class="cats" id="cats"></div>
+</div></header>
+<div class="qwrap">
+  <div class="quick">
+    <button class="btn sec" id="qCall">Позвать официанта</button>
+    <button class="btn sec" id="qBill">Попросить счёт</button>
+    <button class="btn sec" id="qInfo">Отзывы и адрес</button>
+  </div>
+  <input id="q" type="search" placeholder="Поиск по меню" style="margin:10px 0 0">
+</div>
+<main class="menu" id="menu"></main>
+<div class="foot"><button id="admBtn">Вход для администратора</button></div>
+
+<div class="bar hide" id="bar"><button class="btn" id="openCart"><span id="barCnt"></span><span id="barSum"></span></button></div>
+<div class="shade" id="shade"></div>
+
+<section class="sheet" id="cartSheet">
+  <div class="sh"><h2>Ваш заказ</h2><button class="x" data-close>✕</button></div>
+  <div id="cartView">
+    <div id="cartItems"></div>
+    <div class="total" id="cartTotal"></div>
+    <label>Номер стола</label><input id="cTable" inputmode="numeric" maxlength="10" placeholder="Например, 5">
+    <label>Имя</label><input id="cName" autocomplete="name">
+    <label>Телефон</label><input id="cPhone" type="tel" autocomplete="tel" inputmode="tel">
+    <label>Комментарий</label><textarea id="cNote" rows="2"></textarea>
+    <div class="payv">
+      <button class="btn" id="payCash">Оплатить наличными</button>
+      <button class="btn sec" id="payTerminal">Оплатить через терминал</button>
+    </div>
+    <div class="msg" id="payMsg"></div>
+  </div>
+  <div class="ok hidden" id="okView"><b>✓</b><h2>Заказ принят</h2><p id="okText"></p><p class="msg" id="okId"></p>
+    <button class="btn" style="margin-top:14px" id="newOrder">Новый заказ</button></div>
+</section>
+
+<section class="sheet" id="infoSheet">
+  <div class="sh"><h2>О нас</h2><button class="x" data-close>✕</button></div>
+  <div id="infoBody"></div>
+</section>
+
+<section class="sheet" id="admSheet">
+  <div class="sh"><h2>Администратор</h2><button class="x" data-close>✕</button></div>
+  <div id="admLogin">
+    <label>Пароль</label><input id="admPass" type="password" autocomplete="off">
+    <button class="btn" id="admGo" style="width:100%">Войти</button>
+    <div class="msg" id="admErr"></div>
+  </div>
+  <div id="admMain" class="hidden">
+    <label>Название заведения</label><input id="admName">
+    <div class="sh"><b>Блюда</b><button class="btn sm" id="addDish">+ Добавить</button></div>
+    <div id="admList"></div>
+    <div id="admForm" class="hidden" style="margin-top:12px">
+      <label>Название</label><input id="fName">
+      <label>Описание</label><input id="fDesc">
+      <label>Категория</label><input id="fCat">
+      <label>Цена, BYN</label><input id="fPrice" type="number" step="0.01" inputmode="decimal">
+      <label>Ссылка на фото (необязательно)</label><input id="fImg" inputmode="url">
+      <label style="display:flex;align-items:center;gap:8px;font-size:.95rem;color:var(--text);margin-bottom:12px;text-transform:none;letter-spacing:0"><input type="checkbox" id="fStop" style="width:auto;margin:0"> Нет в наличии (стоп-лист)</label>
+      <div class="pay"><button class="btn" id="fSave">Сохранить</button><button class="btn sec" id="fCancel">Отмена</button></div>
+    </div>
+    <button class="btn" id="pubMenu" style="width:100%;margin-top:14px">Сохранить меню на сервере</button>
+    <div class="pay" style="margin-top:10px">
+      <button class="btn sec sm" id="expJson">Копировать JSON меню</button>
+      <button class="btn sec sm" id="impJson">Вставить JSON меню</button>
+    </div>
+    <div class="msg" id="admMsg"></div>
+    <button class="btn sec sm" id="admOut" style="margin-top:8px">Выйти</button>
+  </div>
+</section>
+
+<script>
+const CONFIG = {
+  cafeName: "Station One Cafe",
+  currency: "BYN",
+  place: {
+    address: "Гомель, Советская улица, 29А (2 этаж)",
+    phone: "+375 33 333-52-33",
+    hours: "",
+    lat: 52.434714, lng: 31.009511,
+    wifiName: "", wifiPass: "",
+    yandexOrg: "https://yandex.by/maps/org/station_one_cafe/112602723149/",
+    googleMaps: "",
+    googlePlaceId: "",
+    tags: ["Кальян", "Wi-Fi", "Летняя терраса", "Бизнес-ланч", "Детское меню", "Оплата картой", "Доставка", "С собой"],
+    social: { instagram: "https://www.instagram.com/station_one_gomel/", vk: "https://vk.ru/cafestationone", facebook: "https://facebook.com/cafestationone" },
+    gisUrl: ""
+  },
+  apiUrl: "https://cafe-nfc-menu-api.gde-nikita.workers.dev",
+  demoAdminPassword: "1234",
+  storageKey: "cafe_menu_v3"
+};
+
+const PAYMENT = {
+  provider: "bepaid",
+  endpoint: "",
+  async createCheckout(order){
+    if(!this.endpoint) return {ok:false, reason:"not_configured"};
+    const res = await fetch(this.endpoint,{
+      method:"POST", headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({orderId:order.id, amount:order.total, currency:CONFIG.currency,
+        description:"Заказ "+order.id, items:order.items.map(i=>({id:i.id,qty:i.qty}))})
+    });
+    if(!res.ok) return {ok:false, reason:"server_error"};
+    const data = await res.json();
+    return data.redirect_url ? {ok:true, url:data.redirect_url} : {ok:false, reason:"no_url"};
+  }
+};
+
+const ORDERS = {
+  async submit(order){
+    if(!CONFIG.apiUrl){ console.log("ORDER (демо)", order); return {ok:true, id:order.id}; }
+    try{
+      const r = await fetch(CONFIG.apiUrl+"/order",{method:"POST",headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({table:order.table,type:order.type,name:order.name,phone:order.phone,comment:order.comment,
+          items:order.items.map(i=>({id:i.id,name:i.name,price:i.price,qty:i.qty}))})});
+      const d = await r.json();
+      return r.ok && d.ok ? {ok:true,id:d.id} : {ok:false};
+    }catch(e){ return {ok:false}; }
+  }
+};
+
+const DEFAULT_MENU = [
+  {id:1,category:"Закуски",name:"Картофель фри",desc:"Хрустящий снаружи, мягкий внутри · 100 г",price:6,img:""},
+  {id:2,category:"Закуски",name:"Мутабаль",desc:"Печёные баклажаны, кунжутная паста, оливковое масло · 185 г",price:19,img:""},
+  {id:3,category:"Пицца",name:"Ветчина и грибы",desc:"Томатный соус, ветчина, грибы, моцарелла · 30 см, 460 г",price:19.5,img:""},
+  {id:4,category:"Пицца",name:"Ди маре",desc:"Креветки, мидии, каперсы, маслины, черри, моцарелла · 510 г",price:26,img:""},
+  {id:5,category:"Пицца",name:"Шаверма-пицца",desc:"Чесночный соус, курица, маринованные огурцы, томат, моцарелла · 490 г",price:19.5,img:""},
+  {id:6,category:"Шаверма и сэндвичи",name:"Фалафель сэндвич",desc:"Фалафель, маринованный огурец, томаты, лук, тахини · 350 г",price:9.5,img:""},
+  {id:7,category:"Шаверма и сэндвичи",name:"Шаверма говяжья",desc:"Говядина, огурцы, томаты, лук, тахини · 350 г",price:12.9,img:""},
+  {id:8,category:"Шаверма и сэндвичи",name:"Шаверма куриная",desc:"Куриная грудка, огурцы, чесночный соус, картофель фри · 350 г",price:11.5,img:""},
+  {id:9,category:"Горячее",name:"Барбекю из говядины",desc:"Говяжья вырезка, огурчик, лук, хумус · 340 г",price:39,img:""},
+  {id:10,category:"Горячее",name:"Филадельфия",desc:"Куриное филе, грибы, болгарский перец, сыр, картофель фри · 370 г",price:25,img:""}
+];
+let state = {cafeName:CONFIG.cafeName, menu:DEFAULT_MENU};
+try{ const s = JSON.parse(localStorage.getItem(CONFIG.storageKey)||"null"); if(s && Array.isArray(s.menu)) state = s; }catch(e){}
+state.cafeName = CONFIG.cafeName;
+function save(){ try{ localStorage.setItem(CONFIG.storageKey, JSON.stringify(state)); }catch(e){} }
+
+const TABLE = (new URLSearchParams(location.search).get("table")||"").replace(/[^0-9A-Za-zА-Яа-я-]/g,"").slice(0,10);
+if(TABLE){ const b=document.getElementById("tableBadge"); b.textContent="Стол "+TABLE; b.style.display="inline-block"; }
+let adminPass = "";
+async function loadRemoteMenu(){
+  if(!CONFIG.apiUrl) return;
+  try{
+    const r = await fetch(CONFIG.apiUrl+"/menu"); const d = await r.json();
+    if(d && Array.isArray(d.menu)){ state = {cafeName:CONFIG.cafeName, menu:d.menu}; cart=[]; renderCats(); refresh(); }
+  }catch(e){ }
+}
+async function pushRemoteMenu(){
+  if(!CONFIG.apiUrl) return true;
+  try{
+    const r = await fetch(CONFIG.apiUrl+"/menu",{method:"PUT",headers:{"Content-Type":"application/json","X-Admin-Password":adminPass},body:JSON.stringify(state)});
+    return r.ok;
+  }catch(e){ return false; }
+}
+let cart = [], cat = "Все", isAdmin = false, editId = null;
+const $ = id => document.getElementById(id);
+const esc = s => String(s??"").replace(/[&<>"']/g, c=>({"&":"&","<":"<",">":">",'"':""","'":"&#39;"}[c]));
+const money = n => n.toFixed(2)+" "+CONFIG.currency;
+
+function renderCats(){
+  const cats = ["Все", ...new Set(state.menu.map(i=>i.category))];
+  if(!cats.includes(cat)) cat = "Все";
+  $("cats").innerHTML = cats.map(c=>`<button class="chip ${c===cat?"on":""}" data-cat="${esc(c)}">${esc(c)}</button>`).join("");
+}
+function thumb(i){
+  if(i.img) return `<img class="ph" src="${esc(i.img)}" alt="" loading="lazy">`;
+  const letter = (i.name||"?").trim().charAt(0).toUpperCase();
+  return `<div class="ph">${esc(letter)}</div>`;
+}
+function refresh(){
+  $("cafe").textContent = state.cafeName || CONFIG.cafeName;
+  $("sub").textContent = ((CONFIG.place.address||"").replace(/,?\s*\(.*\)/,"")).replace(/^г\.\s*/,"") || "";
+  document.title = state.cafeName || CONFIG.cafeName;
+  const term = ($("q")?$("q").value:"").trim().toLowerCase();
+  let list = cat==="Все" ? state.menu : state.menu.filter(i=>i.category===cat);
+  if(term) list = list.filter(i=>(i.name+" "+i.desc).toLowerCase().includes(term));
+  $("menu").innerHTML = list.map(i=>{
+    const q = (cart.find(c=>c.id===i.id)||{}).qty||0;
+    const ctl = i.stop ? `<span class="msg">Нет в наличии</span>` : q ? `<div class="qty"><button data-dec="${i.id}">−</button><b>${q}</b><button data-inc="${i.id}">+</button></div>`
+                  : `<button class="btn sm" data-inc="${i.id}">Добавить</button>`;
+    return `<article class="item${i.stop?" stop":""}">${thumb(i)}<div class="info"><div class="name">${esc(i.name)}</div><div class="desc">${esc(i.desc)}</div><div class="row"><span class="price">${money(i.price)}</span>${ctl}</div></div></article>`;
+  }).join("") || '<p class="msg">Меню пока пустое.</p>';
+  const cnt = cart.reduce((s,i)=>s+i.qty,0), sum = cart.reduce((s,i)=>s+i.price*i.qty,0);
+  $("bar").classList.toggle("hide", !cnt);
+  $("barCnt").textContent = "Корзина · "+cnt;
+  $("barSum").textContent = money(sum);
+}
+
+const total = () => cart.reduce((s,i)=>s+i.price*i.qty,0);
+function add(id, d){
+  const item = state.menu.find(m=>m.id===id); if(!item||item.stop) return;
+  const c = cart.find(x=>x.id===id);
+  if(c){ c.qty = Math.max(0, c.qty+d); if(!c.qty) cart = cart.filter(x=>x.id!==id); }
+  else if(d>0) cart.push({id:item.id,name:item.name,price:item.price,qty:1});
+  refresh();
+}
+document.addEventListener("click", e=>{
+  const inc = e.target.closest("[data-inc]"); if(inc){ add(+inc.dataset.inc, 1); return; }
+  const dec = e.target.closest("[data-dec]"); if(dec){ add(+dec.dataset.dec, -1); return; }
+  const chip = e.target.closest("[data-cat]"); if(chip){ cat = chip.dataset.cat; renderCats(); refresh(); return; }
+  if(e.target.closest("[data-close]")) closeSheets();
+});
+
+function openSheet(id){ $("shade").classList.add("on"); $(id).classList.add("on"); }
+function closeSheets(){ $("shade").classList.remove("on"); document.querySelectorAll(".sheet").forEach(s=>s.classList.remove("on")); }
+$("shade").onclick = closeSheets;
+$("openCart").onclick = ()=>{ renderCart(); $("cartView").classList.remove("hidden"); $("okView").classList.add("hidden"); openSheet("cartSheet"); };
+function renderCart(){
+  $("cartItems").innerHTML = cart.map(i=>`<div class="ci"><div><b>${esc(i.name)}</b><div class="msg">${money(i.price)}</div></div>
+    <div class="qty"><button data-dec="${i.id}">−</button><b>${i.qty}</b><button data-inc="${i.id}">+</button></div></div>`).join("") || '<p class="msg">Корзина пуста</p>';
+  $("cartTotal").textContent = "Итого: "+money(total());
+  if(TABLE) $("cTable").value = TABLE;
+}
+async function placeOrder(type){
+  if(!cart.length){ toast("Корзина пуста"); return; }
+  let table = ($("cTable").value||TABLE||"").trim();
+  if(!table){ toast("Укажите номер стола"); return; }
+  const order = {id:"ORD-"+Math.floor(Math.random()*1e6), table, type, name:$("cName").value.trim(), phone:$("cPhone").value.trim(), comment:$("cNote").value.trim(), items:cart.map(i=>({...i})), total:total()};
+  $("payMsg").textContent = "Отправка...";
+  const res = await ORDERS.submit(order);
+  if(!res.ok){ $("payMsg").textContent = "Не удалось отправить заказ"; return; }
+  $("cartView").classList.add("hidden"); $("okView").classList.remove("hidden");
+  const payText = type==="cash" ? "наличными при получении" : type==="terminal" ? "через терминал" : "онлайн";
+  $("okText").textContent = "Оплатите "+money(order.total)+" "+payText+".";
+  $("okId").textContent = "Номер заказа: "+(res.id||order.id);
+  cart = []; refresh();
+}
+$("payCash").onclick = ()=>placeOrder("cash");
+$("payTerminal").onclick = ()=>placeOrder("terminal");
+$("newOrder").onclick = ()=>{ closeSheets(); };
+
+function toast(t){ const el=document.createElement("div"); el.className="toast"; el.textContent=t; document.body.appendChild(el); setTimeout(()=>el.remove(),2500); }
+const lastCall = {};
+async function callStaff(kind){
+  let table = TABLE || $("cTable").value.trim();
+  if(!table) table = (prompt("Номер вашего стола?")||"").trim();
+  if(!/^[0-9A-Za-zА-Яа-я-]{1,10}$/.test(table)){ toast("Укажите номер стола"); return; }
+  if(Date.now()-(lastCall[kind]||0) < 60000){ toast("Запрос уже отправлен, подождите минуту"); return; }
+  if(!CONFIG.apiUrl){ toast("Демо-режим: запрос не отправлен"); return; }
+  try{
+    const r = await fetch(CONFIG.apiUrl+"/call",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({table,kind})});
+    if(r.ok){ lastCall[kind]=Date.now(); toast(kind==="bill"?"Официант скоро принесёт счёт":"Официант скоро подойдёт"); }
+    else if(r.status===429) toast("Запрос уже отправлен, подождите минуту");
+    else toast("Не удалось отправить, попробуйте ещё раз");
+  }catch(e){ toast("Нет связи с сервером"); }
+}
+$("qCall").onclick = ()=>callStaff("waiter");
+$("qBill").onclick = ()=>callStaff("bill");
+
+const P = CONFIG.place;
+const hasXY = () => P.lat && P.lng;
+const mapQuery = () => encodeURIComponent((state.cafeName+" "+((P.address||"Гомель").replace(/\s*\(.*\)/,""))).trim());
+const LINKS = {
+  yandex:  () => P.yandexOrg || (hasXY() ? `https://yandex.by/maps/?pt=${P.lng},${P.lat}&z=17&l=map` : `https://yandex.by/maps/?text=${mapQuery()}`),
+  google:  () => P.googleMaps || (hasXY() ? `https://www.google.com/maps?q=${P.lat},${P.lng}` : `https://www.google.com/maps/search/?api=1&query=${mapQuery()}`),
+  gis:     () => P.gisUrl || `https://2gis.by/gomel/search/${mapQuery()}`,
+  apple:   () => hasXY() ? `https://maps.apple.com/?ll=${P.lat},${P.lng}&q=${encodeURIComponent(state.cafeName)}` : `https://maps.apple.com/?q=${mapQuery()}`,
+  yandexRv:() => P.yandexOrg ? P.yandexOrg.replace(/\/?$/,"")+"/reviews/" : LINKS.yandex(),
+  googleRv:() => P.googlePlaceId ? `https://search.google.com/local/writereview?placeid=${P.googlePlaceId}` : LINKS.google(),
+  gisRv:   () => LINKS.gis()
+};
+function renderInfo(){
+  const row = (k,v) => v ? `<div class="irow"><span>${k}</span><span>${v}</span></div>` : "";
+  const a = (href, label) => href ? `<a class="btn sec" href="${esc(href)}" target="_blank" rel="noopener">${label}</a>` : "";
+  let h = `<h3 style="margin-bottom:6px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;font-size:.9rem">${esc(state.cafeName)}</h3>`;
+  h += row("Адрес", esc(P.address));
+  if(P.phone) h += row("Телефон", `<a href="tel:${esc(P.phone.replace(/[^\d+]/g,""))}" style="color:var(--text)">${esc(P.phone)}</a>`);
+  if(P.wifiName) h += row("Wi-Fi", `${esc(P.wifiName)}${P.wifiPass?` <button class="btn sec sm" data-copy="${esc(P.wifiPass)}">Пароль</button>`:""}`);
+  if(P.tags && P.tags.length) h += `<div class="tags">${P.tags.map(t=>`<span class="tag">${esc(t)}</span>`).join("")}</div>`;
+  h += `<div class="ih">Как добраться</div><div class="pay">${a(LINKS.yandex(),"Яндекс Карты")}${a(LINKS.google(),"Google Карты")}${a(LINKS.gis(),"2ГИС")}${a(LINKS.apple(),"Карты Apple")}</div>`;
+  h += `<div class="ih">Оставить отзыв</div><div class="payv">${a(LINKS.yandexRv(),"Отзыв в Яндекс Картах")}${a(LINKS.googleRv(),"Отзыв в Google")}${a(LINKS.gisRv(),"Отзыв в 2ГИС")}</div>`;
+  const so = P.social || {}; const sl = [["instagram","Instagram"],["vk","ВКонтакте"],["facebook","Facebook"]].filter(x=>so[x[0]]);
+  if(sl.length) h += `<div class="ih">Мы в соцсетях</div><div class="pay">${sl.map(x=>a(so[x[0]],x[1])).join("")}</div>`;
+  h += `<p class="msg" style="margin-top:14px">Спасибо, что выбрали нас! Ваш отзыв помогает нам становиться лучше.</p>`;
+  $("infoBody").innerHTML = h;
+}
+$("qInfo").onclick = ()=>{ renderInfo(); openSheet("infoSheet"); };
+$("q").oninput = refresh;
+
+$("admBtn").onclick = ()=>{ $("admLogin").classList.remove("hidden"); $("admMain").classList.add("hidden"); $("admErr").textContent=""; openSheet("admSheet"); };
+$("admGo").onclick = async ()=>{
+  const p = $("admPass").value;
+  if(CONFIG.apiUrl){
+    try{
+      const r = await fetch(CONFIG.apiUrl+"/auth",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({password:p})});
+      if(!r.ok){ $("admErr").textContent="Неверный пароль"; return; }
+      adminPass = p;
+    }catch(e){ $("admErr").textContent="Нет связи"; return; }
+  } else if(p !== CONFIG.demoAdminPassword){ $("admErr").textContent="Неверный пароль"; return; }
+  isAdmin = true; $("admLogin").classList.add("hidden"); $("admMain").classList.remove("hidden"); renderAdm();
+};
+function renderAdm(){
+  $("admName").value = state.cafeName;
+  $("admList").innerHTML = state.menu.map(i=>`<div class="adm"><div style="min-width:0"><b>${esc(i.name)}</b><div class="msg">${esc(i.category)} · ${money(i.price)}</div></div>
+    <div style="display:flex;gap:6px"><button class="btn sec sm" data-edit="${i.id}">Изм.</button><button class="btn sec sm" data-del="${i.id}">Удал.</button></div></div>`).join("");
+}
+function openForm(id){
+  editId = id; const i = state.menu.find(m=>m.id===id)||{name:"",desc:"",category:"",price:"",img:"",stop:false};
+  $("fName").value=i.name; $("fDesc").value=i.desc||""; $("fCat").value=i.category||""; $("fPrice").value=i.price??""; $("fImg").value=i.img||""; $("fStop").checked=!!i.stop;
+  $("admForm").classList.remove("hidden");
+}
+function commit(){ save(); renderCats(); refresh(); renderAdm(); }
+$("admName").onchange = ()=>{ state.cafeName = $("admName").value.trim()||CONFIG.cafeName; commit(); };
+$("pubMenu").onclick = async ()=>{ const ok = await pushRemoteMenu(); $("admMsg").textContent = ok ? "Сохранено на сервере" : "Ошибка сохранения"; };
+$("addDish").onclick = ()=>openForm(null);
+$("fCancel").onclick = ()=>$("admForm").classList.add("hidden");
+$("fSave").onclick = ()=>{
+  const name=$("fName").value.trim(), price=parseFloat($("fPrice").value);
+  if(!name || !(price>=0)){ alert("Название и цена обязательны"); return; }
+  const data = {name, desc:$("fDesc").value.trim(), category:$("fCat").value.trim()||"Без категории", price, img:$("fImg").value.trim(), stop:$("fStop").checked};
+  if(editId){ const i=state.menu.find(m=>m.id===editId); Object.assign(i, data); }
+  else { data.id = (state.menu.reduce((m,i)=>Math.max(m,i.id),0)||0)+1; state.menu.push(data); }
+  $("admForm").classList.add("hidden"); commit();
+};
+document.addEventListener("click", e=>{
+  const ed = e.target.closest("[data-edit]"); if(ed){ openForm(+ed.dataset.edit); return; }
+  const del = e.target.closest("[data-del]"); if(del){ if(confirm("Удалить блюдо?")){ state.menu=state.menu.filter(m=>m.id!==+del.dataset.del); commit(); } }
+  const cp = e.target.closest("[data-copy]"); if(cp){ navigator.clipboard.writeText(cp.dataset.copy); toast("Скопировано"); }
+});
+$("admOut").onclick = ()=>{ isAdmin=false; adminPass=""; closeSheets(); };
+$("expJson").onclick = ()=>{ navigator.clipboard.writeText(JSON.stringify(state,null,2)); toast("JSON скопирован"); };
+$("impJson").onclick = ()=>{ const raw=prompt("Вставьте JSON меню"); if(!raw) return;
+  try{ const s=JSON.parse(raw); if(!Array.isArray(s.menu)) throw 0; state={cafeName:String(s.cafeName||CONFIG.cafeName),menu:s.menu}; cart=[]; commit(); $("admMsg").textContent="Меню загружено"; }
+  catch(e){ alert("Некорректный JSON"); }
+};
+
+renderCats(); refresh(); loadRemoteMenu();
+</script>
+</body>
+</html>
