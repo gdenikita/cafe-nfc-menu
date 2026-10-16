@@ -4,481 +4,267 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>NFC Меню — гости заказывают сами</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
-:root{
-  --bg:#0f0f10;--card:#1a1a1d;--card2:#222226;--text:#f2f2f3;--muted:#9a9aa0;
-  --accent:#ff3b30;--accent2:#ff6b5a;--ok:#30d158;--tg:#2AABEE;--line:#2c2c30;
-  --gold:#f5c542;--yellow:#e8b84a;
-}
+:root{--bg:#ffffff;--text:#1a1a1a;--muted:#757575;--line:#e5e5e5;--pri:#1a1a1a;--onpri:#fff}
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:var(--bg);color:var(--text);line-height:1.55}
+body{font-family:Inter,-apple-system,BlinkMacSystemFont,sans-serif;background:var(--bg);color:var(--text);line-height:1.55;font-weight:400;letter-spacing:.01em}
 a{color:inherit;text-decoration:none}
-.wrap{max-width:740px;margin:0 auto;padding:0 18px}
-
-@keyframes fadeUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
-@keyframes fadeIn{from{opacity:0}to{opacity:1}}
-@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
-@keyframes pulse-glow{0%,100%{box-shadow:0 8px 28px rgba(42,171,238,.3)}50%{box-shadow:0 8px 36px rgba(42,171,238,.5)}}
-@keyframes slideInRight{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:translateX(0)}}
-@keyframes scalePop{from{opacity:0;transform:scale(.88)}to{opacity:1;transform:scale(1)}}
-@keyframes checkPop{0%{transform:scale(0)}50%{transform:scale(1.2)}100%{transform:scale(1)}}
-@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
-
-.reveal{opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s ease}
-.reveal.visible{opacity:1;transform:translateY(0)}
-.reveal-delay-1{transition-delay:.1s}.reveal-delay-2{transition-delay:.2s}.reveal-delay-3{transition-delay:.3s}.reveal-delay-4{transition-delay:.4s}
-
-/* HERO — no CTA button */
-.hero{position:relative;padding:52px 18px 40px;text-align:center;overflow:hidden;
-  background:radial-gradient(ellipse 80% 55% at 50% -10%,rgba(255,59,48,.22),transparent),
-             radial-gradient(ellipse 50% 35% at 85% 70%,rgba(42,171,238,.1),transparent),var(--bg)}
-.hero .badge{display:inline-block;background:linear-gradient(135deg,var(--accent),var(--accent2));
-  font-size:.72rem;font-weight:700;letter-spacing:.04em;padding:6px 14px;border-radius:20px;margin-bottom:16px;text-transform:uppercase;animation:fadeUp .6s ease both}
-.hero h1{font-size:clamp(1.65rem,5vw,2.25rem);font-weight:800;line-height:1.2;margin-bottom:12px;animation:fadeUp .7s ease .1s both}
-.hero h1 span{color:var(--accent)}
-.hero .lead{font-size:1.05rem;color:var(--muted);max-width:440px;margin:0 auto;animation:fadeUp .7s ease .2s both}
-
-/* FLOW */
-.flow-section{padding:40px 0 16px}
-.flow-section h2{font-size:1.4rem;font-weight:800;text-align:center;margin-bottom:6px}
-.flow-section .section-sub{text-align:center;color:var(--muted);margin-bottom:32px;font-size:.95rem}
-
-.flow-step{margin-bottom:48px;position:relative}
-.flow-step-label{display:flex;align-items:flex-start;gap:12px;margin-bottom:16px}
-.flow-step-label .n{
-  width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent2));
-  display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.95rem;flex:none;
-  box-shadow:0 4px 14px rgba(255,59,48,.35);
-}
-.flow-step-label h3{font-size:1.08rem;font-weight:700}
-.flow-step-label p{font-size:.85rem;color:var(--muted);margin-top:2px}
-
-.connector{width:2px;height:28px;background:linear-gradient(to bottom,var(--accent),transparent);margin:0 auto 8px;opacity:.4}
-
-/* Phone */
-.mini-phone{
-  background:#121214;border:2.5px solid #2a2a2e;border-radius:24px;
-  padding:10px 8px 14px;max-width:290px;margin:0 auto;
-  box-shadow:0 20px 50px rgba(0,0,0,.5);
-  transition:transform .35s ease,box-shadow .35s ease;
-}
-.mini-phone:hover{transform:scale(1.03) translateY(-4px);box-shadow:0 28px 60px rgba(0,0,0,.55)}
-.mini-notch{width:72px;height:6px;background:#2a2a2e;border-radius:3px;margin:0 auto 8px}
-.mini-screen{background:#0d0d0f;border-radius:14px;padding:10px;font-size:.72rem;overflow:hidden;min-height:200px}
-
-/* Menu */
-.ms-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px}
-.ms-header .name{font-weight:700;font-size:.78rem;color:var(--yellow)}
-.ms-header .addr{font-size:.58rem;color:var(--muted)}
-.ms-header .table{background:var(--yellow);color:#111;font-weight:700;font-size:.62rem;padding:3px 9px;border-radius:10px}
-.ms-cats{display:flex;gap:4px;margin-bottom:8px}
-.ms-cats span{padding:4px 9px;border-radius:12px;font-size:.58rem;background:#1e1e22;color:var(--muted)}
-.ms-cats span.on{background:var(--yellow);color:#111;font-weight:600}
-.ms-actions{display:flex;gap:4px;margin-bottom:8px}
-.ms-actions span{flex:1;text-align:center;padding:5px 2px;border:1px solid #2a2a2e;border-radius:8px;font-size:.52rem;color:var(--muted)}
-.ms-item{display:flex;gap:8px;padding:7px 0;border-bottom:1px solid #1e1e22;align-items:center;animation:fadeIn .4s ease both}
-.ms-item:nth-child(1){animation-delay:.05s}.ms-item:nth-child(2){animation-delay:.1s}.ms-item:nth-child(3){animation-delay:.15s}
-.ms-item .pic{width:34px;height:34px;border-radius:7px;background:#1e1e22;display:flex;align-items:center;justify-content:center;font-size:.9rem;flex:none;font-weight:700;color:var(--yellow)}
+.wrap{max-width:720px;margin:0 auto;padding:0 20px}
+.reveal{opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease}
+.reveal.visible{opacity:1;transform:none}
+.hero{padding:56px 20px 40px;text-align:center;border-bottom:1px solid var(--line)}
+.hero .badge{display:inline-block;font-size:.65rem;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:18px;border:1px solid var(--line);padding:6px 14px}
+.hero h1{font-size:clamp(1.5rem,4.5vw,2rem);font-weight:500;line-height:1.25;letter-spacing:.06em;text-transform:uppercase;margin-bottom:14px}
+.hero h1 em{font-style:normal;border-bottom:2px solid var(--text)}
+.hero .lead{font-size:.95rem;color:var(--muted);max-width:420px;margin:0 auto;font-weight:300}
+section{padding:48px 0;border-bottom:1px solid var(--line)}
+h2{font-size:.95rem;font-weight:500;text-align:center;letter-spacing:.2em;text-transform:uppercase;margin-bottom:8px}
+.section-sub{text-align:center;color:var(--muted);margin-bottom:28px;font-size:.85rem;font-weight:300}
+.flow-step{margin-bottom:40px}
+.flow-step-label{display:flex;align-items:flex-start;gap:14px;margin-bottom:16px}
+.flow-step-label .n{width:28px;height:28px;border:1px solid var(--text);display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:500;flex:none}
+.flow-step-label h3{font-size:.9rem;font-weight:500;letter-spacing:.06em;text-transform:uppercase}
+.flow-step-label p{font-size:.8rem;color:var(--muted);margin-top:3px;font-weight:300}
+.side-label{text-align:center;font-size:.65rem;color:var(--muted);margin-bottom:10px;letter-spacing:.12em;text-transform:uppercase}
+.mini-phone{background:#fafafa;border:1px solid var(--line);max-width:280px;margin:0 auto;padding:12px 10px 14px}
+.mini-notch{width:60px;height:5px;background:var(--line);margin:0 auto 10px}
+.mini-screen{background:#fff;border:1px solid var(--line);padding:12px;font-size:.72rem;min-height:180px}
+.ms-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--line)}
+.ms-header .name{font-weight:500;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase}
+.ms-header .addr{font-size:.58rem;color:var(--muted);margin-top:2px;font-weight:300}
+.ms-header .table{border:1px solid var(--text);font-size:.58rem;padding:3px 8px;letter-spacing:.08em;text-transform:uppercase}
+.ms-cats{display:flex;gap:0;margin-bottom:10px;border-bottom:1px solid var(--line)}
+.ms-cats span{padding:8px 10px;font-size:.58rem;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;border-bottom:2px solid transparent}
+.ms-cats span.on{color:var(--text);border-bottom-color:var(--text);font-weight:500}
+.ms-item{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid var(--line);align-items:center}
+.ms-item .pic{width:36px;height:36px;background:#f5f5f5;display:flex;align-items:center;justify-content:center;font-size:.85rem;flex:none;font-weight:300;color:var(--muted)}
 .ms-item .info{flex:1;min-width:0}
-.ms-item .info .t{font-weight:600;font-size:.68rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.ms-item .info .d{font-size:.52rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.ms-item .info .p{color:var(--yellow);font-weight:700;font-size:.65rem;margin-top:1px}
-.ms-item .qty{display:flex;align-items:center;gap:5px;font-size:.65rem}
-.ms-item .qty b{width:18px;height:18px;border-radius:5px;background:#2a2a2e;display:flex;align-items:center;justify-content:center;font-size:.55rem}
-.ms-cart{
-  margin-top:8px;background:var(--yellow);color:#111;border-radius:10px;padding:9px 12px;
-  display:flex;justify-content:space-between;font-weight:700;font-size:.72rem;
-  animation:scalePop .4s ease .3s both;
-}
-
-/* Order form */
-.ms-modal{background:#161618;border-radius:12px;padding:12px}
-.ms-modal h4{font-size:.82rem;font-weight:700;margin-bottom:8px}
-.ms-modal .row{display:flex;justify-content:space-between;padding:5px 0;font-size:.65rem;border-bottom:1px solid #1e1e22}
+.ms-item .info .t{font-weight:400;font-size:.68rem;letter-spacing:.04em;text-transform:uppercase}
+.ms-item .info .d{font-size:.55rem;color:var(--muted);font-weight:300;margin-top:2px}
+.ms-item .info .p{font-weight:400;font-size:.65rem;margin-top:3px}
+.ms-item .qty{font-size:.65rem;display:flex;align-items:center;gap:6px}
+.ms-item .qty b{width:20px;height:20px;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-weight:400;font-size:.6rem}
+.ms-cart{margin-top:10px;background:var(--text);color:#fff;padding:10px 12px;display:flex;justify-content:space-between;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase}
+.ms-modal h4{font-size:.75rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px}
+.ms-modal .row{display:flex;justify-content:space-between;padding:6px 0;font-size:.65rem;border-bottom:1px solid var(--line)}
 .ms-modal .row .pr{color:var(--muted)}
-.ms-modal .total{text-align:right;font-weight:700;font-size:.78rem;margin:8px 0}
-.ms-modal .field{background:#0d0d0f;border:1px solid #2a2a2e;border-radius:7px;padding:7px 9px;font-size:.6rem;color:var(--muted);margin-bottom:5px}
-.ms-modal .pay-row{display:grid;gap:6px;margin-top:8px}
-.ms-modal .pay-btn{background:var(--yellow);color:#111;text-align:center;padding:10px;border-radius:9px;font-weight:700;font-size:.72rem;transition:filter .2s}
-.ms-modal .pay-btn.online{background:var(--tg);color:#fff}
-.ms-modal .pay-btn:hover{filter:brightness(1.1)}
-
-/* Success */
-.ms-success{text-align:center;padding:20px 10px}
-.ms-success .check{
-  width:42px;height:42px;border-radius:50%;border:2.5px solid var(--ok);color:var(--ok);
-  display:flex;align-items:center;justify-content:center;margin:0 auto 10px;font-size:1.2rem;font-weight:700;
-  animation:checkPop .5s ease both;
-}
-.ms-success h4{font-size:.9rem;font-weight:700;margin-bottom:6px}
-.ms-success p{font-size:.65rem;color:var(--muted);margin-bottom:3px}
-.ms-success .ord{font-size:.55rem;color:#555;margin-bottom:12px}
-.ms-success .new-btn{background:var(--yellow);color:#111;display:inline-block;padding:8px 18px;border-radius:9px;font-weight:700;font-size:.72rem}
-
-/* Payment screen */
-.ms-pay{text-align:center;padding:16px 8px}
-.ms-pay .sum{font-size:1.4rem;font-weight:800;color:var(--yellow);margin:8px 0}
-.ms-pay .hint{font-size:.6rem;color:var(--muted);margin-bottom:12px}
-.ms-pay .card-box{background:#1e1e22;border-radius:10px;padding:12px;margin-bottom:10px;text-align:left}
-.ms-pay .card-box .lab{font-size:.55rem;color:var(--muted);margin-bottom:3px}
-.ms-pay .card-box .val{font-size:.7rem;font-weight:600;letter-spacing:.05em}
-.ms-pay .confirm{background:var(--ok);color:#111;padding:10px;border-radius:9px;font-weight:700;font-size:.72rem}
-
-/* Telegram */
-.tg-phone{background:#0e0e10;border:2.5px solid #2a2a2e;border-radius:24px;padding:8px 6px 12px;max-width:290px;margin:0 auto;box-shadow:0 20px 50px rgba(0,0,0,.5)}
-.tg-header{text-align:center;padding:6px 0 8px;font-size:.72rem;font-weight:600;border-bottom:1px solid #1e1e22;margin-bottom:8px}
-.tg-header span{font-size:.55rem;color:var(--muted);display:block}
-.tg-msg{background:#1c1c1f;border-radius:12px;padding:11px;margin-bottom:8px;font-size:.65rem;animation:slideInRight .5s ease both}
-.tg-msg .who{display:flex;justify-content:space-between;margin-bottom:4px}
-.tg-msg .who .n{color:#8b5cf6;font-weight:600;font-size:.6rem}
-.tg-msg .who .a{color:var(--ok);font-size:.55rem}
-.tg-msg .oid{color:#c084fc;font-weight:700}
-.tg-msg .line{margin:2px 0;color:#ccc}
-.tg-msg .status{margin-top:6px;font-size:.6rem}
-.tg-msg .status.new{color:var(--yellow)}
-.tg-msg .status.ok{color:var(--ok)}
-.tg-btn{background:#2a2a2e;text-align:center;padding:8px;border-radius:8px;font-size:.65rem;font-weight:600;margin-top:6px;transition:background .2s}
-.tg-btn.green{background:rgba(48,209,88,.18);color:var(--ok)}
-.tg-alert{background:#1c1c1f;border-radius:10px;padding:9px 11px;font-size:.65rem;margin-bottom:6px;border-left:3px solid var(--yellow);animation:fadeUp .4s ease both}
-.tg-alert .t{font-weight:600}
-
-.side-label{text-align:center;font-size:.75rem;color:var(--muted);margin-bottom:10px;font-weight:500}
-.side-label strong{color:var(--text)}
-
-section{padding:44px 0}
-h2{font-size:1.4rem;font-weight:800;text-align:center;margin-bottom:6px}
-.section-sub{text-align:center;color:var(--muted);margin-bottom:24px;font-size:.95rem}
-
-.benefits{display:grid;gap:12px}
+.ms-modal .total{text-align:right;font-weight:500;font-size:.78rem;margin:10px 0}
+.ms-modal .field{border-bottom:1px solid var(--line);padding:8px 0;font-size:.6rem;color:var(--muted);margin-bottom:4px}
+.ms-modal .pay-row{display:grid;gap:8px;margin-top:12px}
+.ms-modal .pay-btn{background:var(--text);color:#fff;text-align:center;padding:11px;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase}
+.ms-modal .pay-btn.online{background:transparent;color:var(--text);border:1px solid var(--text)}
+.ms-success{text-align:center;padding:24px 8px}
+.ms-success .check{width:40px;height:40px;border:1px solid var(--text);display:flex;align-items:center;justify-content:center;margin:0 auto 12px;font-size:1.1rem}
+.ms-success h4{font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;font-weight:500;margin-bottom:8px}
+.ms-success p{font-size:.65rem;color:var(--muted);font-weight:300}
+.ms-success .ord{font-size:.55rem;color:var(--muted);margin:8px 0 14px}
+.ms-success .new-btn{display:inline-block;background:var(--text);color:#fff;padding:10px 18px;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase}
+.tg-phone{background:#fafafa;border:1px solid var(--line);max-width:280px;margin:0 auto;padding:10px 8px 12px}
+.tg-header{text-align:center;padding:6px 0 10px;font-size:.7rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;border-bottom:1px solid var(--line);margin-bottom:10px}
+.tg-header span{font-size:.55rem;color:var(--muted);display:block;letter-spacing:0;text-transform:none;font-weight:300;margin-top:2px}
+.tg-msg{border:1px solid var(--line);background:#fff;padding:12px;margin-bottom:8px;font-size:.65rem}
+.tg-msg .who{display:flex;justify-content:space-between;margin-bottom:6px}
+.tg-msg .who .n{font-weight:500;font-size:.6rem}
+.tg-msg .who .a{color:var(--muted);font-size:.55rem}
+.tg-msg .oid{font-weight:500}
+.tg-msg .line{margin:2px 0;color:var(--muted);font-weight:300}
+.tg-msg .status{margin-top:8px;font-size:.6rem;letter-spacing:.06em;text-transform:uppercase}
+.tg-btn{border:1px solid var(--text);text-align:center;padding:8px;font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;margin-top:8px}
+.tg-btn.green{background:var(--text);color:#fff}
+.tg-alert{border:1px solid var(--line);border-left:2px solid var(--text);padding:10px 12px;font-size:.65rem;margin-bottom:6px}
+.tg-alert .t{font-weight:500}
+.benefits{display:grid;gap:0}
 @media(min-width:560px){.benefits{grid-template-columns:1fr 1fr}}
-.benefit{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;transition:transform .3s,box-shadow .3s}
-.benefit:hover{transform:translateY(-5px);box-shadow:0 12px 32px rgba(0,0,0,.35)}
-.benefit .icon{width:40px;height:40px;border-radius:10px;background:var(--card2);display:flex;align-items:center;justify-content:center;font-size:1.25rem;margin-bottom:10px}
-.benefit h3{font-size:.95rem;font-weight:700;margin-bottom:4px}
-.benefit p{font-size:.85rem;color:var(--muted)}
-
-.feature-strip{background:linear-gradient(135deg,#1a1a1d,#222);border:1px solid var(--line);border-radius:16px;padding:24px 20px}
+.benefit{border-bottom:1px solid var(--line);padding:20px 0}
+@media(min-width:560px){.benefit{border:1px solid var(--line);padding:20px;margin:-1px 0 0 -1px}}
+.benefit .icon{font-size:.75rem;margin-bottom:10px;color:var(--muted);letter-spacing:.1em}
+.benefit h3{font-size:.8rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px}
+.benefit p{font-size:.85rem;color:var(--muted);font-weight:300}
+.feature-strip{border:1px solid var(--line);padding:8px 20px}
 .feature-strip ul{list-style:none}
-.feature-strip li{padding:10px 0 10px 28px;position:relative;border-bottom:1px solid var(--line);font-size:.92rem}
+.feature-strip li{padding:12px 0 12px 24px;position:relative;border-bottom:1px solid var(--line);font-size:.88rem;font-weight:300}
 .feature-strip li:last-child{border-bottom:0}
-.feature-strip li::before{content:"✓";position:absolute;left:0;color:var(--ok);font-weight:800}
-
-.pricing{display:grid;gap:12px}
-.price-card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px;position:relative;overflow:hidden;transition:transform .3s,box-shadow .3s}
-.price-card:hover{transform:translateY(-6px);box-shadow:0 14px 36px rgba(0,0,0,.4)}
-.price-card.popular{border:2px solid var(--accent);background:linear-gradient(180deg,rgba(255,59,48,.08),var(--card))}
-.price-card.popular::before{content:"ХИТ";position:absolute;top:12px;right:-24px;background:var(--accent);color:#fff;font-size:.65rem;font-weight:800;padding:4px 30px;transform:rotate(45deg)}
-.price-card h3{font-size:1.15rem;font-weight:800}
-.price-card .sub{color:var(--muted);font-size:.85rem;margin-bottom:10px}
-.price-card .amount{font-size:1.9rem;font-weight:800}
-.price-card .amount span{font-size:.95rem;font-weight:500;color:var(--muted)}
-.price-card .old{text-decoration:line-through;color:var(--muted);font-size:.85rem;margin-bottom:10px}
-.price-card ul{list-style:none;margin-top:6px}
-.price-card li{padding:5px 0 5px 22px;position:relative;font-size:.88rem}
-.price-card li::before{content:"✓";position:absolute;left:0;color:var(--ok);font-weight:700}
-.note{background:rgba(48,209,88,.1);border-radius:8px;padding:10px;font-size:.82rem;color:var(--ok);margin-top:10px}
-.maint{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:12px}
-.maint .price{font-weight:800;color:var(--accent);font-size:1.05rem}
-
-.cta{background:linear-gradient(145deg,#1a1a1d,#252528);border:1px solid var(--line);border-radius:18px;padding:36px 22px;text-align:center;margin:16px 0 36px}
-.cta h2{font-size:1.35rem;margin-bottom:8px}
-.cta p{color:var(--muted);margin-bottom:20px;font-size:.95rem}
-.cta .btn{display:inline-flex;align-items:center;gap:8px;background:var(--tg);color:#fff;padding:15px 28px;border-radius:12px;font-weight:700;font-size:1.05rem;box-shadow:0 8px 28px rgba(42,171,238,.3);transition:transform .25s,box-shadow .25s;animation:pulse-glow 2.5s ease infinite}
-.cta .btn:hover{transform:translateY(-3px) scale(1.03);box-shadow:0 12px 36px rgba(42,171,238,.5)}
-.cta .btn svg{width:20px;height:20px;fill:currentColor}
-.cta .handle{display:block;margin-top:12px;font-size:.85rem;color:var(--muted)}
-.cta .free{display:inline-block;margin-top:14px;background:rgba(245,197,66,.12);color:var(--gold);font-size:.82rem;font-weight:600;padding:7px 16px;border-radius:16px}
-
-footer{text-align:center;padding:12px 18px 40px;color:var(--muted);font-size:.85rem}
+.feature-strip li::before{content:"—";position:absolute;left:0;color:var(--muted)}
+.pricing{display:grid;gap:0}
+.price-card{border:1px solid var(--line);padding:28px 22px;position:relative;margin-top:-1px}
+.price-card.popular{border:2px solid var(--text);z-index:1}
+.price-card .tag{position:absolute;top:0;right:0;background:var(--text);color:#fff;font-size:.6rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;padding:6px 12px}
+.price-card h3{font-size:.9rem;font-weight:500;letter-spacing:.16em;text-transform:uppercase}
+.price-card .sub{color:var(--muted);font-size:.8rem;margin:4px 0 14px;font-weight:300}
+.price-card .amount{font-size:1.75rem;font-weight:400;letter-spacing:.04em}
+.price-card .amount span{font-size:.85rem;font-weight:300;color:var(--muted)}
+.price-card ul{list-style:none;margin-top:16px}
+.price-card li{padding:6px 0 6px 18px;position:relative;font-size:.85rem;font-weight:300;color:var(--muted)}
+.price-card li::before{content:"–";position:absolute;left:0;color:var(--text)}
+.price-card li strong{color:var(--text);font-weight:400}
+.maint{border:1px solid var(--line);padding:18px 22px;display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:-1px}
+.maint strong{font-weight:500;letter-spacing:.08em;text-transform:uppercase;font-size:.8rem}
+.maint .hint{font-size:.75rem;color:var(--muted);font-weight:300;margin-top:2px}
+.maint .price{font-weight:400;font-size:1rem}
+.cta{border:1px solid var(--line);padding:40px 22px;text-align:center;margin:40px 0 20px}
+.cta h2{margin-bottom:10px}
+.cta p{color:var(--muted);margin-bottom:24px;font-size:.9rem;font-weight:300}
+.cta .btn{display:inline-flex;align-items:center;gap:10px;background:var(--text);color:#fff;padding:16px 28px;font-weight:400;font-size:.8rem;letter-spacing:.14em;text-transform:uppercase;transition:opacity .2s}
+.cta .btn:hover{opacity:.85}
+.cta .btn svg{width:18px;height:18px;fill:currentColor}
+.cta .handle{display:block;margin-top:14px;font-size:.75rem;color:var(--muted);letter-spacing:.08em}
+footer{text-align:center;padding:20px;color:var(--muted);font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;font-weight:300}
 </style>
 </head>
 <body>
-
-<!-- HERO without CTA -->
 <div class="hero">
   <div class="wrap">
     <div class="badge">Гомель · 2026</div>
-    <h1>Гости заказывают<br><span>сами со стола</span></h1>
+    <h1>Гости заказывают<br><em>сами со стола</em></h1>
     <p class="lead">Приложил телефон к метке — меню, заказ, оплата. Вы сразу видите всё в Telegram.</p>
   </div>
 </div>
-
-<!-- FULL FLOW -->
-<div class="flow-section">
+<section>
   <div class="wrap">
-    <h2 class="reveal">Как это работает на сайте</h2>
-    <p class="section-sub reveal reveal-delay-1">Весь путь гостя — от метки до оплаты</p>
-
-    <!-- 1 MENU -->
+    <h2 class="reveal">Как это работает</h2>
+    <p class="section-sub reveal">Весь путь гостя — от метки до оплаты</p>
     <div class="flow-step reveal">
-      <div class="flow-step-label">
-        <div class="n">1</div>
-        <div><h3>Гость открывает меню</h3><p>Приложил телефон к NFC на столе — сразу ваше меню</p></div>
-      </div>
+      <div class="flow-step-label"><div class="n">1</div><div><h3>Гость открывает меню</h3><p>Приложил телефон к NFC на столе — сразу ваше меню</p></div></div>
       <div class="side-label">Экран гостя</div>
-      <div class="mini-phone">
-        <div class="mini-notch"></div>
-        <div class="mini-screen">
-          <div class="ms-header">
-            <div><div class="name">КАФЕ «ГОМЕЛЬ»</div><div class="addr">Гомель, Советская улица, 29А</div></div>
-            <div class="table">Стол 1</div>
-          </div>
-          <div class="ms-cats"><span class="on">Все</span><span>Горячее</span><span>Салаты</span><span>Напитки</span></div>
-          <div class="ms-actions"><span>Позвать официанта</span><span>Попросить счёт</span><span>Отзывы</span></div>
-          <div class="ms-item"><div class="pic">С</div><div class="info"><div class="t">Стейк из говядины</div><div class="d">Мраморная говядина, овощи гриль</div><div class="p">28.50 BYN</div></div><div class="qty"><b>−</b>1<b>+</b></div></div>
-          <div class="ms-item"><div class="pic">П</div><div class="info"><div class="t">Паста Карбонара</div><div class="d">Спагетти, бекон, сливочный соус</div><div class="p">18.00 BYN</div></div><div class="qty"><b>−</b>1<b>+</b></div></div>
-          <div class="ms-item"><div class="pic">Ц</div><div class="info"><div class="t">Цезарь с курицей</div><div class="d">Курица, айсберг, пармезан</div><div class="p">14.50 BYN</div></div><div class="qty" style="opacity:.4"><b>+</b></div></div>
-          <div class="ms-cart"><span>Корзина · 2</span><span>46.50 BYN</span></div>
-        </div>
-      </div>
+      <div class="mini-phone"><div class="mini-notch"></div><div class="mini-screen">
+        <div class="ms-header"><div><div class="name">Station One Cafe</div><div class="addr">Гомель, Советская 29А</div></div><div class="table">Стол 1</div></div>
+        <div class="ms-cats"><span class="on">Все</span><span>Горячее</span><span>Салаты</span></div>
+        <div class="ms-item"><div class="pic">С</div><div class="info"><div class="t">Стейк</div><div class="d">Мраморная говядина</div><div class="p">28.50 BYN</div></div><div class="qty"><b>−</b>1<b>+</b></div></div>
+        <div class="ms-item"><div class="pic">П</div><div class="info"><div class="t">Карбонара</div><div class="d">Спагетти, бекон</div><div class="p">18.00 BYN</div></div><div class="qty"><b>−</b>1<b>+</b></div></div>
+        <div class="ms-cart"><span>Корзина · 2</span><span>46.50 BYN</span></div>
+      </div></div>
     </div>
-
-    <div class="connector"></div>
-
-    <!-- 2 CART / ORDER -->
     <div class="flow-step reveal">
-      <div class="flow-step-label">
-        <div class="n">2</div>
-        <div><h3>Оформляет заказ</h3><p>Состав, стол, контакты — и выбор оплаты</p></div>
-      </div>
+      <div class="flow-step-label"><div class="n">2</div><div><h3>Оформляет заказ</h3><p>Состав, стол, контакты — и выбор оплаты</p></div></div>
       <div class="side-label">Экран гостя</div>
-      <div class="mini-phone">
-        <div class="mini-notch"></div>
-        <div class="mini-screen">
-          <div class="ms-modal">
-            <h4>Ваш заказ</h4>
-            <div class="row"><span>Стейк из говядины</span><span class="pr">28.50 · − 1 +</span></div>
-            <div class="row"><span>Паста Карбонара</span><span class="pr">18.00 · − 1 +</span></div>
-            <div class="total">Итого: 46.50 BYN</div>
-            <div class="field">Номер стола · 1</div>
-            <div class="field">Имя</div>
-            <div class="field">Телефон</div>
-            <div class="field">Комментарий</div>
-            <div class="pay-row">
-              <div class="pay-btn">Оплатить наличными</div>
-              <div class="pay-btn online">Оплатить картой онлайн</div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <div class="mini-phone"><div class="mini-notch"></div><div class="mini-screen"><div class="ms-modal">
+        <h4>Ваш заказ</h4>
+        <div class="row"><span>Стейк</span><span class="pr">28.50</span></div>
+        <div class="row"><span>Карбонара</span><span class="pr">18.00</span></div>
+        <div class="total">Итого: 46.50 BYN</div>
+        <div class="field">Номер стола · 1</div>
+        <div class="field">Имя</div>
+        <div class="field">Телефон</div>
+        <div class="pay-row"><div class="pay-btn">Оплатить наличными</div><div class="pay-btn online">Оплатить картой</div></div>
+      </div></div></div>
     </div>
-
-    <div class="connector"></div>
-
-    <!-- 3 PAYMENT OPTIONS -->
     <div class="flow-step reveal">
-      <div class="flow-step-label">
-        <div class="n">3</div>
-        <div><h3>Оплата</h3><p>Наличными при получении или картой онлайн (деньги на счёт заведения)</p></div>
-      </div>
-      <div class="side-label">Два варианта на выбор гостя</div>
-      <div style="display:flex;flex-wrap:wrap;gap:14px;justify-content:center">
-        <div class="mini-phone" style="flex:1;min-width:240px">
-          <div class="mini-notch"></div>
-          <div class="mini-screen">
-            <div class="ms-success">
-              <div class="check">✓</div>
-              <h4>Заказ принят</h4>
-              <p>Оплатите 46.50 BYN<br>наличными при получении</p>
-              <div class="ord">ORD-5654763</div>
-              <div class="new-btn">Новый заказ</div>
-            </div>
-          </div>
-        </div>
-        <div class="mini-phone" style="flex:1;min-width:240px">
-          <div class="mini-notch"></div>
-          <div class="mini-screen">
-            <div class="ms-pay">
-              <div style="font-size:.7rem;color:var(--muted)">Оплата картой</div>
-              <div class="sum">46.50 BYN</div>
-              <div class="hint">Через bePaid · на счёт заведения</div>
-              <div class="card-box">
-                <div class="lab">Карта</div>
-                <div class="val">•••• •••• •••• 4242</div>
-              </div>
-              <div class="confirm">Оплатить</div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <div class="flow-step-label"><div class="n">3</div><div><h3>Оплата</h3><p>Наличными или картой — деньги сразу на счёт заведения</p></div></div>
+      <div class="side-label">Подтверждение</div>
+      <div class="mini-phone"><div class="mini-notch"></div><div class="mini-screen"><div class="ms-success">
+        <div class="check">✓</div><h4>Заказ принят</h4>
+        <p>Оплатите 46.50 BYN<br>наличными при получении</p>
+        <div class="ord">ORD-5654763</div><div class="new-btn">Новый заказ</div>
+      </div></div></div>
     </div>
-
-    <div class="connector"></div>
-
-    <!-- 4 TELEGRAM -->
     <div class="flow-step reveal">
-      <div class="flow-step-label">
-        <div class="n">4</div>
-        <div><h3>Заказ приходит в Telegram</h3><p>Официанты и кухня видят всё сразу</p></div>
-      </div>
-      <div class="side-label">Экран персонала</div>
+      <div class="flow-step-label"><div class="n">4</div><div><h3>Заказ в Telegram</h3><p>Официанты и кухня видят всё сразу</p></div></div>
+      <div class="side-label">Чат заведения</div>
       <div class="tg-phone">
-        <div class="tg-header">заказы<span>2 участника</span></div>
+        <div class="tg-header">заказы<span>Telegram</span></div>
         <div class="tg-msg">
-          <div class="who"><span class="n">waiter</span><span class="a">админ</span></div>
-          <div><span class="oid">Заказ #ORD-5654763</span></div>
-          <div class="line">Стол: 1</div>
-          <div class="line">Оплата: Наличными</div>
-          <div class="line">• Стейк из говядины × 1 — 28.50 BYN</div>
-          <div class="line">• Паста Карбонара × 1 — 18.00 BYN</div>
-          <div class="line" style="font-weight:700;margin-top:4px">Итого: 46.50 BYN</div>
-          <div class="status new">Статус: Новый</div>
-          <div class="tg-btn">Беру</div>
+          <div class="who"><span class="n">waiter</span><span class="a">сейчас</span></div>
+          <div class="oid">ORD-5654763 · Стол 1</div>
+          <div class="line">• Стейк × 1 — 28.50 BYN</div>
+          <div class="line">• Карбонара × 1 — 18.00 BYN</div>
+          <div class="line" style="font-weight:500;color:var(--text);margin-top:4px">Итого: 46.50 BYN</div>
+          <div class="status">Статус: Новый</div>
+          <div class="tg-btn green">Беру</div>
         </div>
-      </div>
-    </div>
-
-    <div class="connector"></div>
-
-    <!-- 5 STAFF ACTIONS -->
-    <div class="flow-step reveal">
-      <div class="flow-step-label">
-        <div class="n">5</div>
-        <div><h3>Официант берёт заказ</h3><p>Статус меняется, все видят кто принял</p></div>
-      </div>
-      <div class="side-label">Экран персонала</div>
-      <div class="tg-phone">
-        <div class="tg-header">заказы<span>2 участника</span></div>
-        <div class="tg-msg">
-          <div class="who"><span class="n">waiter</span><span class="a">админ</span></div>
-          <div><span class="oid">Заказ #ORD-5654763</span></div>
-          <div class="line">Стол: 1 · Наличными</div>
-          <div class="line">• Стейк × 1 · Паста × 1</div>
-          <div class="line" style="font-weight:700">Итого: 46.50 BYN</div>
-          <div class="status ok">Статус: Принят</div>
-          <div class="tg-btn green">Готово</div>
-        </div>
-        <div class="tg-alert"><div class="t">Стол 1 зовёт официанта</div></div>
         <div class="tg-alert"><div class="t">Стол 1 просит счёт</div></div>
       </div>
     </div>
-
-    <div class="connector"></div>
-
-    <!-- 6 EXTRA -->
-    <div class="flow-step reveal">
-      <div class="flow-step-label">
-        <div class="n">6</div>
-        <div><h3>Отзывы, карты, «О нас»</h3><p>Гость может оставить отзыв и посмотреть как добраться</p></div>
-      </div>
-      <div class="side-label">Экран гостя</div>
-      <div class="mini-phone">
-        <div class="mini-notch"></div>
-        <div class="mini-screen">
-          <div style="font-weight:700;font-size:.8rem;margin-bottom:10px">О нас</div>
-          <div style="font-size:.7rem;margin-bottom:3px">Кафе «Гомель»</div>
-          <div style="font-size:.58rem;color:var(--muted)">Гомель, Советская 29А</div>
-          <div style="font-size:.6rem;color:var(--yellow);margin:4px 0 10px">+375 33 333-52-33</div>
-          <div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:10px">
-            <span style="font-size:.52rem;background:#1e1e22;padding:3px 6px;border-radius:6px">Wi-Fi</span>
-            <span style="font-size:.52rem;background:#1e1e22;padding:3px 6px;border-radius:6px">Оплата картой</span>
-            <span style="font-size:.52rem;background:#1e1e22;padding:3px 6px;border-radius:6px">Кальян</span>
-          </div>
-          <div style="font-size:.65rem;font-weight:600;margin-bottom:6px">Как добраться</div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-bottom:10px">
-            <span style="font-size:.52rem;background:#1e1e22;padding:6px;border-radius:6px;text-align:center">Яндекс</span>
-            <span style="font-size:.52rem;background:#1e1e22;padding:6px;border-radius:6px;text-align:center">Google</span>
-            <span style="font-size:.52rem;background:#1e1e22;padding:6px;border-radius:6px;text-align:center">2ГИС</span>
-            <span style="font-size:.52rem;background:#1e1e22;padding:6px;border-radius:6px;text-align:center">Apple</span>
-          </div>
-          <div style="font-size:.65rem;font-weight:600;margin-bottom:6px">Оставить отзыв</div>
-          <div style="font-size:.52rem;background:#1e1e22;padding:7px;border-radius:6px;text-align:center;margin-bottom:4px">Яндекс Карты</div>
-          <div style="font-size:.52rem;background:#1e1e22;padding:7px;border-radius:6px;text-align:center;margin-bottom:4px">Google</div>
-          <div style="font-size:.52rem;background:#1e1e22;padding:7px;border-radius:6px;text-align:center">2ГИС</div>
-        </div>
-      </div>
-    </div>
-
   </div>
-</div>
-
-<!-- BENEFITS -->
-<section style="background:#121214;border-top:1px solid var(--line);border-bottom:1px solid var(--line)">
+</section>
+<section>
   <div class="wrap">
     <h2 class="reveal">Зачем это заведению</h2>
-    <p class="section-sub reveal reveal-delay-1">Экономит время и повышает чек</p>
+    <p class="section-sub reveal">Коротко о выгоде</p>
     <div class="benefits">
-      <div class="benefit reveal reveal-delay-1"><div class="icon">⚡</div><h3>Официанты не бегают зря</h3><p>Гости заказывают сами. Персонал обслуживает больше столов.</p></div>
-      <div class="benefit reveal reveal-delay-2"><div class="icon">📈</div><h3>Выше средний чек</h3><p>Удобное меню с фото побуждает брать больше.</p></div>
-      <div class="benefit reveal reveal-delay-3"><div class="icon">🛡</div><h3>Заказы не теряются</h3><p>Всё в Telegram: стол, состав, статусы.</p></div>
-      <div class="benefit reveal reveal-delay-4"><div class="icon">✨</div><h3>Современный имидж</h3><p>Заведение выглядит технологично.</p></div>
+      <div class="benefit reveal"><div class="icon">01</div><h3>Официанты не бегают зря</h3><p>Гости заказывают сами. Персонал обслуживает больше столов.</p></div>
+      <div class="benefit reveal"><div class="icon">02</div><h3>Выше средний чек</h3><p>Удобное меню с фото побуждает брать больше.</p></div>
+      <div class="benefit reveal"><div class="icon">03</div><h3>Заказы не теряются</h3><p>Всё в Telegram: стол, состав, статусы.</p></div>
+      <div class="benefit reveal"><div class="icon">04</div><h3>Современный имидж</h3><p>Заведение выглядит технологично.</p></div>
     </div>
   </div>
 </section>
-
 <section>
   <div class="wrap">
     <h2 class="reveal">Что входит</h2>
-    <p class="section-sub reveal reveal-delay-1">Полный комплект под ключ</p>
-    <div class="feature-strip reveal reveal-delay-2">
-      <ul>
-        <li>NFC-метки на каждый стол</li>
-        <li>Мобильное меню с фото, ценами и составом</li>
-        <li>Корзина и оформление заказа</li>
-        <li>Оплата наличными или онлайн (на счёт заведения)</li>
-        <li>Telegram: заказы, «Беру», «Готово»</li>
-        <li>Позвать официанта и попросить счёт</li>
-        <li>Блок «О нас», карты и отзывы</li>
-        <li>Обучение персонала и поддержка</li>
-      </ul>
-    </div>
+    <p class="section-sub reveal">Полный комплект под ключ</p>
+    <div class="feature-strip reveal"><ul>
+      <li>NFC-метки на каждый стол</li>
+      <li>Мобильное меню с фото, ценами и составом</li>
+      <li>Корзина и оформление заказа</li>
+      <li>Оплата наличными или онлайн (на счёт заведения)</li>
+      <li>Telegram: заказы, статусы, «Беру»</li>
+      <li>Позвать официанта и попросить счёт</li>
+      <li>Блок «О нас», карты и отзывы</li>
+      <li>Обучение персонала</li>
+    </ul></div>
   </div>
 </section>
-
-<section style="background:#121214;border-top:1px solid var(--line);border-bottom:1px solid var(--line)">
+<section>
   <div class="wrap">
     <h2 class="reveal">Цены</h2>
-    <p class="section-sub reveal reveal-delay-1">Прозрачно, без сюрпризов</p>
+    <p class="section-sub reveal">Прозрачно, без сюрпризов</p>
     <div class="pricing">
-      <div class="price-card reveal reveal-delay-1">
-        <h3>Старт</h3><div class="sub">Разовая установка</div>
+      <div class="price-card reveal">
+        <h3>Старт</h3>
+        <div class="sub">Разовая установка</div>
         <div class="amount">240 <span>BYN</span></div>
-        <ul><li>Установка на 8–10 столов</li><li>NFC + меню + заказ</li><li>Telegram + обучение</li></ul>
+        <ul>
+          <li>Установка на 8–10 столов</li>
+          <li>NFC + меню + заказ</li>
+          <li>Telegram + обучение</li>
+        </ul>
       </div>
-      <div class="price-card popular reveal reveal-delay-2">
-        <h3>Стандарт</h3><div class="sub">Лучший выбор</div>
-        <div class="amount">340 <span>BYN</span></div>
-        <div class="old">вместо 420 BYN</div>
-        <ul><li>Всё из «Старт»</li><li>3 месяца обслуживания</li><li>Обновления и проверка меток</li></ul>
-        <div class="note">3 месяца поддержки уже включены</div>
+      <div class="price-card popular reveal">
+        <div class="tag">Хит</div>
+        <h3>Стандарт</h3>
+        <div class="sub">Средний тариф · лучший выбор</div>
+        <div class="amount">490 <span>BYN</span></div>
+        <ul>
+          <li>Всё из «Старт»</li>
+          <li><strong>Проверка и замена меток — раз в месяц</strong></li>
+          <li>Обновления меню и поддержка</li>
+        </ul>
       </div>
-      <div class="price-card reveal reveal-delay-3">
-        <h3>Годовой</h3><div class="sub">Максимум спокойствия</div>
+      <div class="price-card reveal">
+        <h3>Годовой</h3>
+        <div class="sub">Максимум спокойствия</div>
         <div class="amount">790 <span>BYN</span></div>
-        <div class="old">вместо 960 BYN</div>
-        <ul><li>Всё из «Старт»</li><li>12 месяцев обслуживания</li><li>Замена меток</li></ul>
+        <ul>
+          <li>Всё из «Старт»</li>
+          <li><strong>Проверка и замена меток — раз в неделю</strong></li>
+          <li>12 месяцев приоритетной поддержки</li>
+        </ul>
       </div>
     </div>
-    <div class="maint reveal reveal-delay-4">
-      <div><strong>Обслуживание</strong><br><span style="font-size:.8rem;color:var(--muted)">После пакета</span></div>
+    <div class="maint reveal">
+      <div><strong>Обслуживание</strong><div class="hint">После окончания пакета</div></div>
       <div class="price">60 BYN/мес</div>
     </div>
   </div>
 </section>
-
-<!-- ONLY CTA AT THE END -->
 <div class="wrap">
   <div class="cta reveal">
-    <h2>Попробуйте бесплатно</h2>
-    <p>Поставим на 2–3 стола на 7–10 дней — без оплаты</p>
+    <h2>Напишите — покажем вживую</h2>
+    <p>Расскажу, как это работает именно у вас, и подберём пакет</p>
     <a href="https://t.me/Gde_Nikita" class="btn" target="_blank" rel="noopener">
       <svg viewBox="0 0 24 24"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.161c-.18 1.897-.962 6.502-1.359 8.627-.168.9-.5 1.201-.82 1.23-.697.064-1.226-.461-1.901-.903-1.056-.693-1.653-1.124-2.678-1.8-1.185-.781-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.139-5.062 3.345-.479.329-.913.489-1.302.481-.428-.009-1.252-.242-1.865-.44-.752-.244-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.831-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635.099-.002.321.023.465.141.121.099.155.232.171.326.016.093.036.305.02.47z"/></svg>
       Написать в Telegram
     </a>
     <span class="handle">@Gde_Nikita</span>
-    <div class="free">Бесплатный тест · без обязательств</div>
   </div>
 </div>
-
 <footer><p>Гомель · NFC Меню для кафе и ресторанов</p></footer>
-
 <script>
 const reveals=document.querySelectorAll('.reveal');
-const obs=new IntersectionObserver(entries=>{
-  entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')});
-},{threshold:0.08,rootMargin:'0px 0px -24px 0px'});
+const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')})},{threshold:0.08,rootMargin:'0px 0px -24px 0px'});
 reveals.forEach(r=>obs.observe(r));
 </script>
 </body>
